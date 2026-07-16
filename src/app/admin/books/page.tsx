@@ -67,7 +67,12 @@ export default async function AdminBooksPage({
                   <StatusBadge status={book.status} />
                 </td>
                 <td className="px-4 py-3">
-                  <div className="flex gap-4">
+                  <div className="flex flex-wrap gap-4">
+                    {book.status === "available" && (
+                      <Link href={`/admin/loans/new?bookId=${book.id}`} className="focus-ring font-medium text-brass underline">
+                        Check out
+                      </Link>
+                    )}
                     <Link href={`/admin/books/${book.id}/edit`} className="focus-ring font-medium text-green-deep underline">
                       Edit
                     </Link>
