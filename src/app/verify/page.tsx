@@ -106,7 +106,7 @@ function VerifyForm() {
           type="button"
           onClick={handleResend}
           disabled={resending}
-          className="focus-ring text-center text-[15px] font-medium text-green-deep underline disabled:opacity-60"
+          className="focus-ring text-center text-[14px] font-semibold text-accent hover:underline disabled:opacity-60"
         >
           {resending ? "Sending…" : "Resend code"}
         </button>

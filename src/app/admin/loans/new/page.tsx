@@ -25,13 +25,16 @@ export default async function NewLoanPage({
     if (!book) notFound();
     if (book.status !== "available") {
       return (
-        <div className="max-w-lg rounded-lg border border-line bg-white/60 p-8">
-          <h1 className="font-serif text-2xl font-semibold text-green-deep">Already checked out</h1>
-          <p className="mt-3 text-[17px] text-ink">
-            “{book.title}” is already checked out to someone else.
+        <div className="max-w-lg rounded-xl border border-line shadow-card bg-paper p-8">
+          <h1 className="text-xl font-bold tracking-tight text-ink">Already checked out</h1>
+          <p className="mt-3 text-[15px] text-ink-soft">
+            &ldquo;{book.title}&rdquo; is already checked out to someone else.
           </p>
-          <Link href="/admin/loans" className="mt-6 inline-block focus-ring font-medium text-green-deep underline">
-            Back to Borrow &amp; Return
+          <Link
+            href="/admin/loans"
+            className="mt-6 inline-block focus-ring text-[13.5px] font-semibold text-accent hover:underline"
+          >
+            ← Back to Borrow &amp; Return
           </Link>
         </div>
       );
@@ -48,10 +51,10 @@ export default async function NewLoanPage({
 
   return (
     <div className="max-w-2xl">
-      <Link href="/admin/loans" className="focus-ring text-[15px] font-medium text-green-deep underline">
+      <Link href="/admin/loans" className="focus-ring text-[13.5px] font-semibold text-ink-soft hover:text-accent">
         ← Back to Borrow &amp; Return
       </Link>
-      <h1 className="mt-4 font-serif text-4xl font-semibold text-green-deep">Check Out a Book</h1>
+      <h1 className="mt-3 text-2xl font-bold tracking-tight text-ink">Check Out a Book</h1>
 
       <div className="mt-8">
         <CheckoutForm

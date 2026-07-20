@@ -12,7 +12,7 @@ function SubmitButton({ label, savingLabel }: { label: string; savingLabel: stri
     <button
       type="submit"
       disabled={pending}
-      className="focus-ring rounded-md bg-green-deep px-6 py-3 text-lg font-medium text-paper hover:bg-green-deep-hover disabled:opacity-60"
+      className="focus-ring rounded-lg bg-accent px-5 py-2.5 text-[14.5px] font-semibold text-white shadow-card hover:bg-accent-hover disabled:opacity-60"
     >
       {pending ? savingLabel : label}
     </button>
@@ -55,7 +55,7 @@ export function BookForm({
           className={inputClass}
         />
         {state.fieldErrors?.title && (
-          <p className="text-sm text-terracotta">{state.fieldErrors.title}</p>
+          <p className="text-sm text-critical">{state.fieldErrors.title}</p>
         )}
       </FormField>
 
@@ -69,7 +69,7 @@ export function BookForm({
           className={inputClass}
         />
         {state.fieldErrors?.author && (
-          <p className="text-sm text-terracotta">{state.fieldErrors.author}</p>
+          <p className="text-sm text-critical">{state.fieldErrors.author}</p>
         )}
       </FormField>
 
@@ -130,7 +130,7 @@ export function BookForm({
           name="cover"
           type="file"
           accept="image/png,image/jpeg,image/webp"
-          className="focus-ring w-full rounded-md border border-line bg-white px-4 py-3 text-[17px]"
+          className="focus-ring w-full rounded-lg border border-line bg-paper-dim px-3.5 py-2.5 text-[15px]"
         />
       </FormField>
 

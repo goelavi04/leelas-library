@@ -11,7 +11,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="focus-ring rounded-md bg-green-deep px-6 py-3 text-lg font-medium text-paper hover:bg-green-deep-hover disabled:opacity-60"
+      className="focus-ring rounded-lg bg-accent px-5 py-2.5 text-[14.5px] font-semibold text-white shadow-card hover:bg-accent-hover disabled:opacity-60"
     >
       {pending ? "Checking out…" : "Check out this book"}
     </button>
@@ -55,7 +55,7 @@ export function CheckoutForm({
               </option>
             ))}
           </select>
-          {state.fieldErrors?.bookId && <p className="text-sm text-terracotta">{state.fieldErrors.bookId}</p>}
+          {state.fieldErrors?.bookId && <p className="text-sm text-critical">{state.fieldErrors.bookId}</p>}
         </FormField>
       )}
 
@@ -98,7 +98,7 @@ export function CheckoutForm({
             ))}
           </select>
           {state.fieldErrors?.borrowerUserId && (
-            <p className="text-sm text-terracotta">{state.fieldErrors.borrowerUserId}</p>
+            <p className="text-sm text-critical">{state.fieldErrors.borrowerUserId}</p>
           )}
         </FormField>
       ) : (
@@ -106,7 +106,7 @@ export function CheckoutForm({
           <FormField label="Borrower's name" htmlFor="borrowerName">
             <input id="borrowerName" name="borrowerName" type="text" className={inputClass} />
             {state.fieldErrors?.borrowerName && (
-              <p className="text-sm text-terracotta">{state.fieldErrors.borrowerName}</p>
+              <p className="text-sm text-critical">{state.fieldErrors.borrowerName}</p>
             )}
           </FormField>
           <FormField label="Contact (optional)" htmlFor="borrowerContact" hint="Phone or email">

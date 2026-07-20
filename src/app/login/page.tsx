@@ -82,12 +82,12 @@ export default function LoginPage() {
         </button>
 
         <div className="flex flex-col items-center gap-2 text-[15px] text-ink-soft">
-          <Link href="/forgot-password" className="font-medium text-green-deep underline">
+          <Link href="/forgot-password" className="font-semibold text-accent hover:underline">
             Forgot your password?
           </Link>
           <p>
             New here?{" "}
-            <Link href="/signup" className="font-medium text-green-deep underline">
+            <Link href="/signup" className="font-semibold text-accent hover:underline">
               Create an account
             </Link>
           </p>

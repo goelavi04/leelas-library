@@ -12,7 +12,7 @@ function ConfirmButton() {
     <button
       type="submit"
       disabled={pending}
-      className="focus-ring rounded-md bg-terracotta px-6 py-3 text-lg font-medium text-paper hover:opacity-90 disabled:opacity-60"
+      className="focus-ring rounded-lg bg-critical px-5 py-2.5 text-[14.5px] font-semibold text-white hover:opacity-90 disabled:opacity-60"
     >
       {pending ? "Deleting…" : "Yes, delete this book"}
     </button>
@@ -29,10 +29,11 @@ export function DeleteBookConfirm({
   const [state, formAction] = useActionState<DeleteState, FormData>(action, {});
 
   return (
-    <div className="max-w-lg rounded-lg border border-line bg-white/60 p-8">
-      <h1 className="font-serif text-2xl font-semibold text-green-deep">Delete this book?</h1>
-      <p className="mt-3 text-[17px] text-ink">
-        Are you sure you want to delete <strong>“{bookTitle}”</strong>? This cannot be undone.
+    <div className="max-w-lg rounded-xl border border-line shadow-card bg-paper p-8">
+      <h1 className="text-xl font-bold tracking-tight text-ink">Delete this book?</h1>
+      <p className="mt-3 text-[15px] text-ink-soft">
+        Are you sure you want to delete <strong className="text-ink">&ldquo;{bookTitle}&rdquo;</strong>? This
+        cannot be undone.
       </p>
 
       {state.error && (
@@ -41,11 +42,11 @@ export function DeleteBookConfirm({
         </div>
       )}
 
-      <form action={formAction} className="mt-6 flex flex-wrap gap-4">
+      <form action={formAction} className="mt-6 flex flex-wrap gap-3">
         <ConfirmButton />
         <Link
           href="/admin/books"
-          className="focus-ring rounded-md border border-line px-6 py-3 text-lg font-medium text-ink hover:bg-paper-dim"
+          className="focus-ring rounded-lg border border-line px-5 py-2.5 text-[14.5px] font-semibold text-ink hover:bg-paper-dim"
         >
           Cancel
         </Link>

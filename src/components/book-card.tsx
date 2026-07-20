@@ -7,9 +7,9 @@ export function BookCard({ book, coverUrl }: { book: Book; coverUrl: string | nu
   return (
     <Link
       href={`/catalog/${book.id}`}
-      className="focus-ring group flex flex-col overflow-hidden rounded-lg border border-line bg-white/60 transition hover:border-brass hover:shadow-sm"
+      className="focus-ring group flex flex-col overflow-hidden rounded-xl border border-line shadow-card bg-paper transition hover:shadow-md hover:-translate-y-0.5"
     >
-      <div className="flex aspect-[3/4] items-center justify-center bg-paper-dim">
+      <div className="flex aspect-[3/4] items-center justify-center bg-gradient-to-br from-accent-soft to-teal-soft">
         {coverUrl ? (
           <Image
             src={coverUrl}
@@ -19,18 +19,18 @@ export function BookCard({ book, coverUrl }: { book: Book; coverUrl: string | nu
             className="h-full w-full object-cover"
           />
         ) : (
-          <span className="font-serif text-3xl text-brass-light">
+          <span className="text-3xl font-bold text-accent">
             {book.title.charAt(0).toUpperCase()}
           </span>
         )}
       </div>
-      <div className="flex flex-1 flex-col gap-2 p-4">
-        <h3 className="font-serif text-lg font-semibold leading-snug text-ink group-hover:text-green-deep">
+      <div className="flex flex-1 flex-col gap-1.5 p-4">
+        <h3 className="text-[15px] font-semibold leading-snug text-ink group-hover:text-accent">
           {book.title}
         </h3>
-        <p className="text-[15px] text-ink-soft">{book.author}</p>
+        <p className="text-[13.5px] text-ink-soft">{book.author}</p>
         <div className="mt-auto flex items-center justify-between gap-2 pt-2">
-          {book.genre && <span className="text-sm text-ink-soft">{book.genre}</span>}
+          {book.genre && <span className="text-[12.5px] text-ink-faint">{book.genre}</span>}
           <StatusBadge status={book.status} />
         </div>
       </div>

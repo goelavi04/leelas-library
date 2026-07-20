@@ -1,17 +1,32 @@
 @import "tailwindcss";
 
 :root {
-  /* Warm library palette */
-  --paper: #f7f2e9;
-  --paper-dim: #efe7d8;
-  --ink: #2b2420;
-  --ink-soft: #524537;
-  --green-deep: #1f3d31;
-  --green-deep-hover: #163026;
-  --brass: #a97c34;
-  --brass-light: #c9a35f;
-  --terracotta: #a24632;
-  --line: #ddd1b8;
+  /* Product palette: white/near-white surface, indigo brand accent, teal + amber for variety */
+  --paper: #ffffff;
+  --paper-dim: #f6f7f9;
+  --ink: #12131a;
+  --ink-soft: #6b7280;
+  --ink-faint: #9ca3af;
+  --line: #e5e7eb;
+
+  --accent: #4338ca;
+  --accent-hover: #372f9e;
+  --accent-soft: #eef0fd;
+
+  --teal: #0d9488;
+  --teal-soft: #e6f5f3;
+
+  --good: #059669;
+  --good-soft: #e3f6ee;
+
+  --gold: #d97706;
+  --gold-hover: #c26a05;
+  --gold-soft: #fdf0dc;
+
+  --critical: #dc2626;
+  --critical-soft: #fdeaea;
+
+  --shadow-card: 0 1px 2px rgba(15, 23, 42, 0.05), 0 4px 14px rgba(15, 23, 42, 0.06);
 
   --background: var(--paper);
   --foreground: var(--ink);
@@ -22,31 +37,69 @@
   --color-paper-dim: var(--paper-dim);
   --color-ink: var(--ink);
   --color-ink-soft: var(--ink-soft);
-  --color-green-deep: var(--green-deep);
-  --color-green-deep-hover: var(--green-deep-hover);
-  --color-brass: var(--brass);
-  --color-brass-light: var(--brass-light);
-  --color-terracotta: var(--terracotta);
+  --color-ink-faint: var(--ink-faint);
   --color-line: var(--line);
+
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-soft: var(--accent-soft);
+
+  --color-teal: var(--teal);
+  --color-teal-soft: var(--teal-soft);
+
+  --color-good: var(--good);
+  --color-good-soft: var(--good-soft);
+
+  --color-gold: var(--gold);
+  --color-gold-hover: var(--gold-hover);
+  --color-gold-soft: var(--gold-soft);
+
+  --color-critical: var(--critical);
+  --color-critical-soft: var(--critical-soft);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
-  --font-serif: var(--font-fraunces);
-  --font-sans: var(--font-source-sans);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-playfair);
+}
+
+@utility shadow-card {
+  box-shadow: var(--shadow-card);
+}
+
+@utility font-display {
+  font-family: var(--font-display), Georgia, serif;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper: #201c17;
-    --paper-dim: #17140f;
-    --ink: #ece4d4;
-    --ink-soft: #c6bba4;
-    --green-deep: #4a7862;
-    --green-deep-hover: #5b8c73;
-    --brass: #d3aa5c;
-    --brass-light: #e6c988;
-    --terracotta: #d97a5f;
-    --line: #3a3427;
+    --paper: #0b0c10;
+    --paper-dim: #111319;
+    --ink: #f2f3f5;
+    --ink-soft: #9aa1ad;
+    --ink-faint: #6b7280;
+    --line: #23262f;
+
+    --accent: #8b85f0;
+    --accent-hover: #a29cf5;
+    --accent-soft: #1c1a35;
+
+    --teal: #2dd4bf;
+    --teal-soft: #0f2624;
+
+    --good: #34d399;
+    --good-soft: #0f2a22;
+
+    --gold: #e3a83f;
+    --gold-hover: #f0c26a;
+    --gold-soft: #2c2211;
+
+    --critical: #f87171;
+    --critical-soft: #2c1414;
+
+    --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.35), 0 4px 14px rgba(0, 0, 0, 0.4);
   }
 }
 
@@ -58,32 +111,18 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
-  font-size: 17px;
+  font-size: 16px;
   line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
 }
 
 h1, h2, h3, h4 {
-  font-family: var(--font-serif), Georgia, serif;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-}
-
-/* Shelf-of-spines divider motif */
-.shelf-divider {
-  display: flex;
-  align-items: flex-end;
-  gap: 3px;
-  height: 22px;
-  overflow: hidden;
-}
-
-.shelf-divider span {
-  display: block;
-  width: 10px;
-  border-radius: 1px 1px 0 0;
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.015em;
 }
 
 .focus-ring:focus-visible {
-  outline: 3px solid var(--brass);
+  outline: 3px solid var(--gold);
   outline-offset: 2px;
 }

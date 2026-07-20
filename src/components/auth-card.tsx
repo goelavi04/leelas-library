@@ -11,9 +11,9 @@ export function AuthCard({
 }) {
   return (
     <div className="mx-auto flex max-w-md flex-col px-4 py-16 sm:px-0">
-      <h1 className="font-serif text-3xl font-semibold text-green-deep">{title}</h1>
+      <h1 className="text-2xl font-bold tracking-tight text-ink">{title}</h1>
       {subtitle && <p className="mt-2 text-ink-soft">{subtitle}</p>}
-      <div className="mt-8 rounded-lg border border-line bg-white/60 p-6 sm:p-8">
+      <div className="mt-8 rounded-xl border border-line shadow-card bg-paper p-6 sm:p-8">
         {children}
       </div>
     </div>
@@ -33,7 +33,7 @@ export function FormField({
 }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={htmlFor} className="text-[15px] font-medium text-ink">
+      <label htmlFor={htmlFor} className="text-[13px] font-semibold text-ink-soft">
         {label}
       </label>
       {children}
@@ -43,14 +43,14 @@ export function FormField({
 }
 
 export const inputClass =
-  "focus-ring w-full rounded-md border border-line bg-white px-4 py-3 text-[17px] text-ink placeholder:text-ink-soft/60";
+  "focus-ring w-full rounded-lg border border-line bg-paper-dim px-3.5 py-2.5 text-[15px] text-ink placeholder:text-ink-faint focus:bg-paper";
 
 export const primaryButtonClass =
-  "focus-ring w-full rounded-md bg-green-deep px-6 py-3 text-lg font-medium text-paper hover:bg-green-deep-hover disabled:opacity-60";
+  "focus-ring w-full rounded-lg bg-accent px-5 py-2.5 text-[15px] font-semibold text-white shadow-card hover:bg-accent-hover disabled:opacity-60";
 
 export function ErrorMessage({ message }: { message: string }) {
   return (
-    <p className="rounded-md bg-terracotta/10 px-4 py-3 text-[15px] text-terracotta" role="alert">
+    <p className="rounded-lg bg-critical-soft px-4 py-3 text-[14px] text-critical" role="alert">
       {message}
     </p>
   );
@@ -58,7 +58,7 @@ export function ErrorMessage({ message }: { message: string }) {
 
 export function SuccessMessage({ message }: { message: string }) {
   return (
-    <p className="rounded-md bg-green-deep/10 px-4 py-3 text-[15px] text-green-deep" role="status">
+    <p className="rounded-lg bg-good-soft px-4 py-3 text-[14px] text-good" role="status">
       {message}
     </p>
   );

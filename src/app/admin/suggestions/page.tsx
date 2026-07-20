@@ -19,28 +19,26 @@ export default async function SuggestionsPage() {
 
   return (
     <div>
-      <h1 className="font-serif text-4xl font-semibold text-green-deep">Suggested Acquisitions</h1>
+      <h1 className="text-3xl font-bold tracking-tight text-ink">Suggested Acquisitions</h1>
       <p className="mt-2 text-ink-soft">
         Two simple, real signals for what to buy next — grounded in what people actually searched
         for and borrowed, not guesses.
       </p>
 
       <section className="mt-10">
-        <h2 className="font-serif text-2xl font-semibold text-green-deep">
-          Searches that found nothing
-        </h2>
-        <p className="mt-1 text-[15px] text-ink-soft">
+        <h2 className="text-lg font-bold tracking-tight text-ink">Searches that found nothing</h2>
+        <p className="mt-1 text-[14.5px] text-ink-soft">
           People searched for these and the catalog had no matches.
         </p>
-        {(!zeroResults || zeroResults.length === 0) ? (
+        {!zeroResults || zeroResults.length === 0 ? (
           <p className="mt-4 text-ink-soft">No zero-result searches yet.</p>
         ) : (
-          <div className="mt-4 overflow-x-auto rounded-lg border border-line">
-            <table className="w-full min-w-[400px] text-left text-[15px]">
-              <thead className="bg-paper-dim text-ink-soft">
+          <div className="mt-4 overflow-x-auto rounded-xl border border-line shadow-card">
+            <table className="w-full min-w-[400px] text-left text-[14.5px]">
+              <thead className="bg-paper-dim text-ink-faint">
                 <tr>
-                  <th className="px-4 py-3 font-medium">Search</th>
-                  <th className="px-4 py-3 font-medium">When</th>
+                  <th className="px-4 py-3 text-[11.5px] font-bold uppercase tracking-wide">Search</th>
+                  <th className="px-4 py-3 text-[11.5px] font-bold uppercase tracking-wide">When</th>
                 </tr>
               </thead>
               <tbody>
@@ -57,22 +55,22 @@ export default async function SuggestionsPage() {
       </section>
 
       <section className="mt-12">
-        <h2 className="font-serif text-2xl font-semibold text-green-deep">High demand, low availability</h2>
-        <p className="mt-1 text-[15px] text-ink-soft">
+        <h2 className="text-lg font-bold tracking-tight text-ink">High demand, low availability</h2>
+        <p className="mt-1 text-[14.5px] text-ink-soft">
           Genres that get borrowed often relative to how many copies exist — consider adding more.
         </p>
         {topDemand.length === 0 ? (
           <p className="mt-4 text-ink-soft">Not enough borrowing history yet to tell.</p>
         ) : (
-          <div className="mt-4 overflow-x-auto rounded-lg border border-line">
-            <table className="w-full min-w-[600px] text-left text-[15px]">
-              <thead className="bg-paper-dim text-ink-soft">
+          <div className="mt-4 overflow-x-auto rounded-xl border border-line shadow-card">
+            <table className="w-full min-w-[600px] text-left text-[14.5px]">
+              <thead className="bg-paper-dim text-ink-faint">
                 <tr>
-                  <th className="px-4 py-3 font-medium">Genre</th>
-                  <th className="px-4 py-3 font-medium">Books in catalog</th>
-                  <th className="px-4 py-3 font-medium">Currently available</th>
-                  <th className="px-4 py-3 font-medium">Total borrows</th>
-                  <th className="px-4 py-3 font-medium">Demand ratio</th>
+                  <th className="px-4 py-3 text-[11.5px] font-bold uppercase tracking-wide">Genre</th>
+                  <th className="px-4 py-3 text-[11.5px] font-bold uppercase tracking-wide">Books in catalog</th>
+                  <th className="px-4 py-3 text-[11.5px] font-bold uppercase tracking-wide">Currently available</th>
+                  <th className="px-4 py-3 text-[11.5px] font-bold uppercase tracking-wide">Total borrows</th>
+                  <th className="px-4 py-3 text-[11.5px] font-bold uppercase tracking-wide">Demand ratio</th>
                 </tr>
               </thead>
               <tbody>

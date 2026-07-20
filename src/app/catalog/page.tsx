@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { searchBooks, coverImageUrl, PAGE_SIZE } from "@/lib/books";
 import { BookCard } from "@/components/book-card";
+import { SearchIcon } from "@/components/icons";
 
 export const metadata = { title: "Catalog" };
 
@@ -34,7 +35,7 @@ export default async function CatalogPage({
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-      <h1 className="font-serif text-4xl font-semibold text-green-deep">Catalog</h1>
+      <h1 className="text-3xl font-bold tracking-tight text-ink">Catalog</h1>
       <p className="mt-2 text-ink-soft">
         {total} {total === 1 ? "book" : "books"} in the library
       </p>
@@ -43,34 +44,37 @@ export default async function CatalogPage({
         <label htmlFor="q" className="sr-only">
           Search by title, author, genre, or ISBN
         </label>
-        <input
-          id="q"
-          name="q"
-          type="search"
-          defaultValue={query}
-          placeholder="Search by title, author, genre, or ISBN…"
-          className="focus-ring min-w-0 flex-1 rounded-md border border-line bg-white px-4 py-3 text-[17px] text-ink placeholder:text-ink-soft/60"
-        />
-        <label className="flex items-center gap-2 text-[15px] text-ink-soft">
+        <div className="relative min-w-0 flex-1">
+          <SearchIcon className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-faint" />
+          <input
+            id="q"
+            name="q"
+            type="search"
+            defaultValue={query}
+            placeholder="Search by title, author, genre, or ISBN…"
+            className="focus-ring w-full rounded-lg border border-line bg-paper-dim py-2.5 pl-10 pr-4 text-[15px] text-ink placeholder:text-ink-faint"
+          />
+        </div>
+        <label className="flex items-center gap-2 text-[14px] text-ink-soft">
           <input
             type="checkbox"
             name="available"
             value="1"
             defaultChecked={availableOnly}
-            className="h-5 w-5 rounded border-line"
+            className="h-4 w-4 rounded border-line accent-accent"
           />
           Available only
         </label>
         <button
           type="submit"
-          className="focus-ring rounded-md bg-green-deep px-6 py-3 text-[17px] font-medium text-paper hover:bg-green-deep-hover"
+          className="focus-ring rounded-lg bg-accent px-5 py-2.5 text-[14.5px] font-semibold text-white shadow-card hover:bg-accent-hover"
         >
           Search
         </button>
       </form>
 
       {books.length === 0 ? (
-        <p className="mt-12 text-lg text-ink-soft">
+        <p className="mt-12 text-[15px] text-ink-soft">
           No books matched your search. Try a different title, author, or genre.
         </p>
       ) : (
@@ -84,21 +88,27 @@ export default async function CatalogPage({
       {totalPages > 1 && (
         <nav className="mt-10 flex items-center justify-center gap-4" aria-label="Pagination">
           {page > 1 ? (
-            <Link href={pageHref(page - 1)} className="focus-ring rounded-md border border-line px-4 py-2 text-[15px] font-medium hover:bg-paper-dim">
+            <Link
+              href={pageHref(page - 1)}
+              className="focus-ring rounded-lg border border-line px-4 py-2 text-[14px] font-semibold hover:bg-paper-dim"
+            >
               ← Previous
             </Link>
           ) : (
-            <span className="rounded-md border border-line px-4 py-2 text-[15px] text-ink-soft/50">← Previous</span>
+            <span className="rounded-lg border border-line px-4 py-2 text-[14px] text-ink-faint">← Previous</span>
           )}
-          <span className="text-[15px] text-ink-soft">
+          <span className="text-[14px] text-ink-soft">
             Page {page} of {totalPages}
           </span>
           {page < totalPages ? (
-            <Link href={pageHref(page + 1)} className="focus-ring rounded-md border border-line px-4 py-2 text-[15px] font-medium hover:bg-paper-dim">
+            <Link
+              href={pageHref(page + 1)}
+              className="focus-ring rounded-lg border border-line px-4 py-2 text-[14px] font-semibold hover:bg-paper-dim"
+            >
               Next →
             </Link>
           ) : (
-            <span className="rounded-md border border-line px-4 py-2 text-[15px] text-ink-soft/50">Next →</span>
+            <span className="rounded-lg border border-line px-4 py-2 text-[14px] text-ink-faint">Next →</span>
           )}
         </nav>
       )}
