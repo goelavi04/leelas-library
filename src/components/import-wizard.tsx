@@ -44,7 +44,7 @@ function UploadStep({ onParsed }: { onParsed: (rows: ParsedRow[], warning?: stri
   }, [state.rows, state.warning]);
 
   return (
-    <form action={formAction} className="flex flex-col gap-6" encType="multipart/form-data">
+    <form action={formAction} className="flex flex-col gap-6">
       {state.error && <ErrorMessage message={state.error} />}
 
       <div className="flex flex-col gap-1.5">

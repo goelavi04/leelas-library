@@ -42,7 +42,7 @@ export function BookForm({
   const [state, formAction] = useActionState<BookFormState, FormData>(action, {});
 
   return (
-    <form action={formAction} className="flex flex-col gap-6" encType="multipart/form-data">
+    <form action={formAction} className="flex flex-col gap-6">
       {state.error && <ErrorMessage message={state.error} />}
 
       <FormField label="Title" htmlFor="title">
