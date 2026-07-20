@@ -2,7 +2,7 @@ import Link from "next/link";
 import { format } from "date-fns";
 import { requireUser } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { isOverdue } from "@/lib/loans";
+import { isOverdue, isDueSoon } from "@/lib/loans";
 import { getYouMightLike } from "@/lib/recommendations";
 import { coverImageUrl } from "@/lib/books";
 import { BookCard } from "@/components/book-card";
@@ -89,6 +89,11 @@ export default async function DashboardPage() {
                         <span className="inline-flex items-center gap-1.5 rounded-full bg-critical-soft px-2.5 py-1 text-[12.5px] font-semibold text-critical">
                           <AlertTriangleIcon className="h-3 w-3" />
                           Overdue — {format(new Date(loan.due_date), "MMM d, yyyy")}
+                        </span>
+                      ) : isDueSoon(loan.due_date, loan.returned_at) ? (
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-gold-soft px-2.5 py-1 text-[12.5px] font-semibold text-gold">
+                          <ClockIcon className="h-3 w-3" />
+                          Due soon — {format(new Date(loan.due_date), "MMM d, yyyy")}
                         </span>
                       ) : (
                         <span className="text-ink-soft">{format(new Date(loan.due_date), "MMM d, yyyy")}</span>

@@ -13,10 +13,7 @@ export default async function HomePage() {
     <div>
       <section className="bg-accent px-4 py-24 text-center sm:px-6">
         <div className="mx-auto max-w-xl">
-          <p className="text-[12.5px] font-semibold uppercase tracking-wider text-white/60">
-            Family library
-          </p>
-          <h1 className="font-display mt-4 text-4xl font-bold leading-tight text-white text-balance sm:text-5xl">
+          <h1 className="font-display text-2xl font-bold leading-tight text-white text-balance sm:text-3xl">
             A home for every story we&rsquo;ve collected — where every book finds its reader.
           </h1>
           <p className="mt-4 text-[16.5px] text-white/80">

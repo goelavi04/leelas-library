@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { format } from "date-fns";
 import { createClient } from "@/lib/supabase/server";
-import { isOverdue } from "@/lib/loans";
+import { isOverdue, isDueSoon } from "@/lib/loans";
 import { markReturned } from "@/app/admin/loans/actions";
-import { AlertTriangleIcon, PlusIcon, TrendingUpIcon } from "@/components/icons";
+import { AlertTriangleIcon, ClockIcon, PlusIcon, TrendingUpIcon } from "@/components/icons";
 
 export const metadata = { title: "Borrow & Return" };
 
@@ -64,6 +64,7 @@ export default async function AdminLoansPage() {
           <tbody>
             {loans.map((loan) => {
               const overdue = isOverdue(loan.due_date, loan.returned_at);
+              const dueSoon = isDueSoon(loan.due_date, loan.returned_at);
               const bound = markReturned.bind(null, loan.id);
               return (
                 <tr key={loan.id} className="border-t border-line">
@@ -95,6 +96,11 @@ export default async function AdminLoansPage() {
                       <span className="inline-flex items-center gap-1.5 rounded-full bg-critical-soft px-2.5 py-1 text-[12.5px] font-semibold text-critical">
                         <AlertTriangleIcon className="h-3 w-3" />
                         Overdue — {format(new Date(loan.due_date), "MMM d, yyyy")}
+                      </span>
+                    ) : dueSoon ? (
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-gold-soft px-2.5 py-1 text-[12.5px] font-semibold text-gold">
+                        <ClockIcon className="h-3 w-3" />
+                        Due soon — {format(new Date(loan.due_date), "MMM d, yyyy")}
                       </span>
                     ) : (
                       format(new Date(loan.due_date), "MMM d, yyyy")

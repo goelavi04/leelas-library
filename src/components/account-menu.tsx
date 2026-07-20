@@ -28,6 +28,7 @@ export function AccountMenu({
 }) {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     function onPointerDown(event: MouseEvent) {
@@ -46,8 +47,27 @@ export function AccountMenu({
     };
   }, []);
 
+  function cancelClose() {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+  }
+
+  function scheduleClose() {
+    cancelClose();
+    // Small delay so moving the pointer from the trigger to the panel
+    // (or briefly off it) doesn't snap the menu shut.
+    closeTimer.current = setTimeout(() => setOpen(false), 200);
+  }
+
   return (
-    <div ref={containerRef} className="relative ml-1">
+    <div
+      ref={containerRef}
+      className="relative ml-1"
+      onMouseEnter={() => {
+        cancelClose();
+        setOpen(true);
+      }}
+      onMouseLeave={scheduleClose}
+    >
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
