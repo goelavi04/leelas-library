@@ -1,32 +1,31 @@
 @import "tailwindcss";
 
 :root {
-  /* Product palette: white/near-white surface, indigo brand accent, teal + amber for variety */
-  --paper: #ffffff;
-  --paper-dim: #f6f7f9;
-  --ink: #12131a;
-  --ink-soft: #6b7280;
-  --ink-faint: #9ca3af;
-  --line: #e5e7eb;
+  /* Warm, paper-toned palette — deliberately not another indigo SaaS theme.
+     Light only: this is a small family catalog, not an app that needs to
+     chase the visitor's OS theme preference. */
+  --paper: #faf8f3;
+  --paper-dim: #f1ebe0;
+  --ink: #211d17;
+  --ink-soft: #6b6255;
+  --ink-faint: #9c9284;
+  --line: #e4dbc9;
 
-  --accent: #4338ca;
-  --accent-hover: #372f9e;
-  --accent-soft: #eef0fd;
+  --accent: #2f5d4a;
+  --accent-hover: #24493a;
+  --accent-soft: #e7efe8;
 
-  --teal: #0d9488;
-  --teal-soft: #e6f5f3;
+  --good: #3d6a8a;
+  --good-soft: #e7eef3;
 
-  --good: #059669;
-  --good-soft: #e3f6ee;
+  --gold: #b5762b;
+  --gold-hover: #98611f;
+  --gold-soft: #f4e8d3;
 
-  --gold: #d97706;
-  --gold-hover: #c26a05;
-  --gold-soft: #fdf0dc;
+  --critical: #a1442c;
+  --critical-soft: #f5e5df;
 
-  --critical: #dc2626;
-  --critical-soft: #fdeaea;
-
-  --shadow-card: 0 1px 2px rgba(15, 23, 42, 0.05), 0 4px 14px rgba(15, 23, 42, 0.06);
+  --shadow-card: 0 1px 2px rgba(33, 29, 23, 0.04), 0 2px 8px rgba(33, 29, 23, 0.05);
 
   --background: var(--paper);
   --foreground: var(--ink);
@@ -43,9 +42,6 @@
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
   --color-accent-soft: var(--accent-soft);
-
-  --color-teal: var(--teal);
-  --color-teal-soft: var(--teal-soft);
 
   --color-good: var(--good);
   --color-good-soft: var(--good-soft);
@@ -73,36 +69,6 @@
   font-family: var(--font-display), Georgia, serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --paper: #0b0c10;
-    --paper-dim: #111319;
-    --ink: #f2f3f5;
-    --ink-soft: #9aa1ad;
-    --ink-faint: #6b7280;
-    --line: #23262f;
-
-    --accent: #8b85f0;
-    --accent-hover: #a29cf5;
-    --accent-soft: #1c1a35;
-
-    --teal: #2dd4bf;
-    --teal-soft: #0f2624;
-
-    --good: #34d399;
-    --good-soft: #0f2a22;
-
-    --gold: #e3a83f;
-    --gold-hover: #f0c26a;
-    --gold-soft: #2c2211;
-
-    --critical: #f87171;
-    --critical-soft: #2c1414;
-
-    --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.35), 0 4px 14px rgba(0, 0, 0, 0.4);
-  }
-}
-
 * {
   border-color: var(--line);
 }
@@ -112,17 +78,26 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
   font-size: 16px;
-  line-height: 1.55;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3, h4 {
-  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+/* Two-tier hierarchy: serif for page identity, a clean grotesque for
+   structural UI headers. Real editorial products pair two typefaces on
+   purpose — one workhorse everywhere doesn't read as designed. */
+h1 {
+  font-family: var(--font-display), Georgia, serif;
   font-weight: 700;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.005em;
+}
+
+h2, h3, h4 {
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 .focus-ring:focus-visible {
-  outline: 3px solid var(--gold);
+  outline: 2px solid var(--gold);
   outline-offset: 2px;
 }

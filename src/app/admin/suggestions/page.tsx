@@ -26,7 +26,7 @@ export default async function SuggestionsPage() {
       </p>
 
       <section className="mt-10">
-        <h2 className="text-lg font-bold tracking-tight text-ink">Searches that found nothing</h2>
+        <h2 className="text-lg font-semibold tracking-tight text-ink">Searches that found nothing</h2>
         <p className="mt-1 text-[14.5px] text-ink-soft">
           People searched for these and the catalog had no matches.
         </p>
@@ -55,7 +55,7 @@ export default async function SuggestionsPage() {
       </section>
 
       <section className="mt-12">
-        <h2 className="text-lg font-bold tracking-tight text-ink">High demand, low availability</h2>
+        <h2 className="text-lg font-semibold tracking-tight text-ink">High demand, low availability</h2>
         <p className="mt-1 text-[14.5px] text-ink-soft">
           Genres that get borrowed often relative to how many copies exist — consider adding more.
         </p>

@@ -9,7 +9,7 @@ export function BookCard({ book, coverUrl }: { book: Book; coverUrl: string | nu
       href={`/catalog/${book.id}`}
       className="focus-ring group flex flex-col overflow-hidden rounded-xl border border-line shadow-card bg-paper transition hover:shadow-md hover:-translate-y-0.5"
     >
-      <div className="flex aspect-[3/4] items-center justify-center bg-gradient-to-br from-accent-soft to-teal-soft">
+      <div className="flex aspect-[3/4] items-center justify-center bg-accent-soft">
         {coverUrl ? (
           <Image
             src={coverUrl}
@@ -19,7 +19,7 @@ export function BookCard({ book, coverUrl }: { book: Book; coverUrl: string | nu
             className="h-full w-full object-cover"
           />
         ) : (
-          <span className="text-3xl font-bold text-accent">
+          <span className="font-display text-3xl font-bold text-accent/70">
             {book.title.charAt(0).toUpperCase()}
           </span>
         )}

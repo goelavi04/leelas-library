@@ -52,11 +52,11 @@ export default async function BookDetailPage({
       </Link>
 
       <div className="mt-6 flex flex-col gap-8 sm:flex-row">
-        <div className="flex w-full max-w-[220px] flex-shrink-0 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-accent-soft to-teal-soft shadow-card">
+        <div className="flex w-full max-w-[220px] flex-shrink-0 items-center justify-center overflow-hidden rounded-xl border border-line bg-accent-soft shadow-card">
           {coverUrl ? (
             <Image src={coverUrl} alt="" width={220} height={300} className="h-auto w-full object-cover" />
           ) : (
-            <span className="flex aspect-[3/4] w-full items-center justify-center text-5xl font-bold text-accent">
+            <span className="font-display flex aspect-[3/4] w-full items-center justify-center text-5xl font-bold text-accent/70">
               {book.title.charAt(0).toUpperCase()}
             </span>
           )}
@@ -101,7 +101,7 @@ export default async function BookDetailPage({
 
       {isAdmin && (
         <div className="mt-12">
-          <h2 className="text-xl font-bold tracking-tight text-ink">Borrow history</h2>
+          <h2 className="text-xl font-semibold tracking-tight text-ink">Borrow history</h2>
           {loanHistory.length === 0 ? (
             <p className="mt-3 text-ink-soft">This book has never been borrowed.</p>
           ) : (

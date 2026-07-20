@@ -49,7 +49,7 @@ export default async function DashboardPage() {
           <p className="text-[13px] text-ink-soft">Currently borrowed</p>
         </div>
         <div className="rounded-xl border border-line shadow-card bg-paper p-5">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-soft text-teal">
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gold-soft text-gold">
             <TrendingUpIcon className="h-4 w-4" />
           </span>
           <p className="mt-3 text-2xl font-bold text-ink">{loans.length}</p>
@@ -58,7 +58,7 @@ export default async function DashboardPage() {
       </div>
 
       <section className="mt-12">
-        <h2 className="text-xl font-bold tracking-tight text-ink">Currently borrowed</h2>
+        <h2 className="text-xl font-semibold tracking-tight text-ink">Currently borrowed</h2>
         {active.length === 0 ? (
           <p className="mt-3 text-ink-soft">You don&rsquo;t have any books checked out right now.</p>
         ) : (
@@ -102,7 +102,7 @@ export default async function DashboardPage() {
 
       {recommendations.length > 0 && (
         <section className="mt-12">
-          <h2 className="text-xl font-bold tracking-tight text-ink">You might also like</h2>
+          <h2 className="text-xl font-semibold tracking-tight text-ink">You might also like</h2>
           <p className="mt-1 text-[14.5px] text-ink-soft">
             Based on the genres and authors you&rsquo;ve borrowed before.
           </p>
@@ -115,7 +115,7 @@ export default async function DashboardPage() {
       )}
 
       <section className="mt-12">
-        <h2 className="text-xl font-bold tracking-tight text-ink">Borrowing history</h2>
+        <h2 className="text-xl font-semibold tracking-tight text-ink">Borrowing history</h2>
         {past.length === 0 ? (
           <p className="mt-3 text-ink-soft">No past borrows yet.</p>
         ) : (
