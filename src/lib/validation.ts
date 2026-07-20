@@ -7,11 +7,19 @@ export const passwordSchema = z
   .min(8, "Password must be at least 8 characters.")
   .max(72, "Password is too long.");
 
-export const signupSchema = z.object({
-  fullName: z.string().trim().min(1, "Enter your name.").max(200),
-  email: emailSchema,
-  password: passwordSchema,
-});
+export const signupSchema = z
+  .object({
+    fullName: z.string().trim().min(1, "Enter your name.").max(200),
+    email: emailSchema,
+    password: passwordSchema,
+    accountType: z.enum(["user", "admin"]),
+    adminCode: z.string().trim().max(200).optional().or(z.literal("")),
+  })
+  .superRefine((data, ctx) => {
+    if (data.accountType === "admin" && !data.adminCode) {
+      ctx.addIssue({ code: "custom", path: ["adminCode"], message: "Enter the admin code." });
+    }
+  });
 
 export const loginSchema = z.object({
   email: emailSchema,
