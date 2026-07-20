@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { postLoginPath } from "@/lib/post-login-redirect";
 import { loginSchema } from "@/lib/validation";
 import {
   AuthCard,
@@ -44,7 +45,7 @@ export default function LoginPage() {
       return;
     }
 
-    router.push("/dashboard");
+    router.push(await postLoginPath(supabase));
     router.refresh();
   }
 

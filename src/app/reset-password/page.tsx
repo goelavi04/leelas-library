@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { postLoginPath } from "@/lib/post-login-redirect";
 import { resetPasswordSchema } from "@/lib/validation";
 import {
   AuthCard,
@@ -63,7 +64,7 @@ export default function ResetPasswordPage() {
       return;
     }
 
-    router.push("/dashboard");
+    router.push(await postLoginPath(supabase));
     router.refresh();
   }
 

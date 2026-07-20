@@ -3,6 +3,7 @@
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { postLoginPath } from "@/lib/post-login-redirect";
 import {
   AuthCard,
   FormField,
@@ -50,7 +51,7 @@ function VerifyForm() {
       return;
     }
 
-    router.push("/dashboard");
+    router.push(await postLoginPath(supabase));
     router.refresh();
   }
 
