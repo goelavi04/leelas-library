@@ -15,10 +15,13 @@ export default async function BookDetailPage({
   const { id } = await params;
   const supabase = await createClient();
 
-  const { data: book } = await supabase.from("books").select("*").eq("id", id).single();
+  // Independent — run in parallel instead of one after the other.
+  const [{ data: book }, session] = await Promise.all([
+    supabase.from("books").select("*").eq("id", id).single(),
+    getSession(),
+  ]);
   if (!book) notFound();
 
-  const session = await getSession();
   const isAdmin = session?.profile.role === "admin";
 
   let loanHistory: {

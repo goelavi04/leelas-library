@@ -1,4 +1,5 @@
 import "server-only";
+import { cache } from "react";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import type { Profile } from "@/lib/supabase/types";
@@ -13,8 +14,14 @@ export interface SessionInfo {
  * Reads the current session from Supabase Auth and re-fetches the profile
  * row (with role) directly from the database — never trust a role coming
  * from anywhere other than this lookup.
+ *
+ * Wrapped in React's cache() so the auth round trip runs once per request
+ * no matter how many times it's called — the root layout (for the header)
+ * and the page itself (via requireUser/requireAdmin) both call this on
+ * every navigation, and without dedup that's two Supabase auth calls doing
+ * identical work on every single page load.
  */
-export async function getSession(): Promise<SessionInfo | null> {
+export const getSession = cache(async (): Promise<SessionInfo | null> => {
   const supabase = await createClient();
   const {
     data: { user },
@@ -31,7 +38,7 @@ export async function getSession(): Promise<SessionInfo | null> {
   if (!profile) return null;
 
   return { userId: user.id, email: user.email ?? null, profile };
-}
+});
 
 /** Use in Server Components/pages that require any logged-in user. */
 export async function requireUser(): Promise<SessionInfo> {

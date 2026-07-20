@@ -22,17 +22,19 @@ export default async function DashboardPage() {
   const session = await requireUser();
   const supabase = await createClient();
 
-  const { data } = await supabase
-    .from("loans")
-    .select("id, due_date, checked_out_at, returned_at, books:book_id (id, title, author)")
-    .eq("borrower_user_id", session.userId)
-    .order("checked_out_at", { ascending: false });
+  // Independent queries — run in parallel instead of one after the other.
+  const [{ data }, recommendations] = await Promise.all([
+    supabase
+      .from("loans")
+      .select("id, due_date, checked_out_at, returned_at, books:book_id (id, title, author)")
+      .eq("borrower_user_id", session.userId)
+      .order("checked_out_at", { ascending: false }),
+    getYouMightLike(supabase, session.userId),
+  ]);
 
   const loans = (data as unknown as LoanRow[]) ?? [];
   const active = loans.filter((l) => !l.returned_at);
   const past = loans.filter((l) => l.returned_at);
-
-  const recommendations = await getYouMightLike(supabase, session.userId);
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6">
