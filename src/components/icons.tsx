@@ -145,6 +145,10 @@ export function LogOutIcon(props: IconProps) {
   );
 }
 
+export function ChevronDownIcon(props: IconProps) {
+  return base(<path d="M6 9l6 6 6-6" />, props);
+}
+
 export function FileTextIcon(props: IconProps) {
   return base(
     <>

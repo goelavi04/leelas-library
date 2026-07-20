@@ -17,11 +17,11 @@ export default async function HomePage() {
             Family library
           </p>
           <h1 className="font-display mt-4 text-4xl font-bold leading-tight text-white text-balance sm:text-5xl">
-            Every book, always findable.
+            A home for every story we&rsquo;ve collected — where every book finds its reader.
           </h1>
           <p className="mt-4 text-[16.5px] text-white/80">
-            Browse our family&rsquo;s collection, see what&rsquo;s available, and check your own
-            borrowing history — all in one simple place.
+            Browse the shelves, see what&rsquo;s in, and keep track of what you&rsquo;re reading —
+            all in one place.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link

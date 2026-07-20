@@ -1,19 +1,7 @@
 import Link from "next/link";
 import { getSession } from "@/lib/auth";
-import { LogoutButton } from "@/components/logout-button";
+import { AccountMenu } from "@/components/account-menu";
 import { BookIcon, ClockIcon, GridIcon } from "@/components/icons";
-
-function initials(name: string | null, email: string | null): string {
-  if (name) {
-    return name
-      .trim()
-      .split(/\s+/)
-      .slice(0, 2)
-      .map((part) => part[0]?.toUpperCase() ?? "")
-      .join("");
-  }
-  return email ? email[0].toUpperCase() : "?";
-}
 
 export async function SiteHeader() {
   const session = await getSession();
@@ -58,12 +46,11 @@ export async function SiteHeader() {
           )}
 
           {session ? (
-            <div className="ml-1 flex items-center gap-1.5 rounded-full border border-line py-1 pl-1 pr-1.5">
-              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-accent text-[11px] font-semibold text-white">
-                {initials(session.profile.full_name, session.profile.email)}
-              </span>
-              <LogoutButton />
-            </div>
+            <AccountMenu
+              fullName={session.profile.full_name}
+              email={session.profile.email}
+              role={session.profile.role}
+            />
           ) : (
             <>
               <Link
