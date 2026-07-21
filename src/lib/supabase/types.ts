@@ -50,6 +50,12 @@ export type ZeroResultSearch = {
   searched_at: string;
 };
 
+export type AdminCodeAttempt = {
+  id: number;
+  ip: string;
+  attempted_at: string;
+};
+
 export type GenreDemandRow = {
   genre: string;
   total_books: number;
@@ -98,6 +104,12 @@ export type Database = {
         Row: ZeroResultSearch;
         Insert: { query: string };
         Update: Partial<ZeroResultSearch>;
+        Relationships: [];
+      };
+      admin_code_attempts: {
+        Row: AdminCodeAttempt;
+        Insert: { ip: string };
+        Update: Partial<AdminCodeAttempt>;
         Relationships: [];
       };
     };

@@ -43,7 +43,13 @@ export async function searchBooks(
     .order("title", { ascending: true })
     .range(from, to);
 
-  if (error) throw error;
+  if (error) {
+    // A transient failure here (network blip, upstream WAF blocking an
+    // unusual query string, etc.) shouldn't crash the whole catalog page —
+    // degrade to "no results" instead of a 500.
+    console.error("searchBooks failed:", error);
+    return { books: [], total: 0 };
+  }
 
   return { books: data ?? [], total: count ?? 0 };
 }
