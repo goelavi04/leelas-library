@@ -101,3 +101,28 @@ h2, h3, h4 {
   outline: 2px solid var(--gold);
   outline-offset: 2px;
 }
+
+/* Buttons (and button-styled CTA links) look pressed on hover, not just
+   on actual click — gives every action a tactile, "this is clickable"
+   feel instead of relying on a color change alone.
+   `a.shadow-card.bg-accent`/`.bg-gold` targets link-as-button CTAs
+   ("Add a Book", "Browse the catalog", etc.) specifically — book-card
+   and admin-hub-card links use `bg-paper`, not `bg-accent`/`bg-gold`,
+   so they're untouched and keep their own "lift up" hover transform. */
+button:not(:disabled),
+a.shadow-card.bg-accent,
+a.shadow-card.bg-gold {
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+button:not(:disabled):hover,
+a.shadow-card.bg-accent:hover,
+a.shadow-card.bg-gold:hover {
+  transform: translateY(1px);
+}
+
+button:not(:disabled):active,
+a.shadow-card.bg-accent:active,
+a.shadow-card.bg-gold:active {
+  transform: translateY(1.5px) scale(0.98);
+}

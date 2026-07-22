@@ -33,15 +33,15 @@ export default function LoginPage() {
 
     setLoading(true);
     const supabase = createClient();
-    const { error: signInError } = await supabase.auth.signInWithPassword(parsed.data);
+    const { data, error: signInError } = await supabase.auth.signInWithPassword(parsed.data);
     setLoading(false);
 
-    if (signInError) {
+    if (signInError || !data.user) {
       setError("That email or password isn't right. Please try again.");
       return;
     }
 
-    router.push(await postLoginPath(supabase));
+    router.push(await postLoginPath(supabase, data.user.id));
     router.refresh();
   }
 
