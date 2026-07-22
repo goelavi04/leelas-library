@@ -26,10 +26,6 @@ export const loginSchema = z.object({
   password: z.string().min(1, "Enter your password."),
 });
 
-export const resetPasswordSchema = z.object({
-  password: passwordSchema,
-});
-
 const optionalText = (max: number) =>
   z
     .string()

@@ -37,10 +37,6 @@ export default function LoginPage() {
     setLoading(false);
 
     if (signInError) {
-      if (signInError.message.toLowerCase().includes("email not confirmed")) {
-        router.push(`/verify?email=${encodeURIComponent(parsed.data.email)}`);
-        return;
-      }
       setError("That email or password isn't right. Please try again.");
       return;
     }
@@ -83,9 +79,6 @@ export default function LoginPage() {
         </button>
 
         <div className="flex flex-col items-center gap-2 text-[15px] text-ink-soft">
-          <Link href="/forgot-password" className="font-semibold text-accent hover:underline">
-            Forgot your password?
-          </Link>
           <p>
             New here?{" "}
             <Link href="/signup" className="font-semibold text-accent hover:underline">

@@ -100,5 +100,9 @@ export async function signupAction(_prevState: SignupState, formData: FormData):
     });
   }
 
-  redirect(`/verify?email=${encodeURIComponent(email)}`);
+  // Email confirmation is disabled (Supabase Dashboard > Authentication >
+  // Sign In / Providers > Email > "Confirm email" off), so signUp() above
+  // already returns an active session — go straight in instead of
+  // bouncing through an email-based verification step.
+  redirect(accountType === "admin" ? "/admin" : "/dashboard");
 }
