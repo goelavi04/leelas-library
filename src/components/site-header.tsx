@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { getSession } from "@/lib/auth";
 import { AccountMenu } from "@/components/account-menu";
+import { MobileNav } from "@/components/mobile-nav";
 import { BookIcon, ClockIcon, GridIcon } from "@/components/icons";
 
 export async function SiteHeader() {
   const session = await getSession();
+  const isAdmin = session?.profile.role === "admin";
 
   return (
     <header className="sticky top-0 z-10 border-b border-line bg-paper/90 backdrop-blur">
@@ -16,7 +18,16 @@ export async function SiteHeader() {
           </span>
         </Link>
 
-        <nav className="flex items-center gap-1 sm:gap-1.5">
+        <MobileNav
+          isAdmin={isAdmin}
+          session={
+            session
+              ? { fullName: session.profile.full_name, email: session.profile.email, role: session.profile.role }
+              : null
+          }
+        />
+
+        <nav className="hidden items-center gap-1 md:flex md:gap-1.5">
           <Link
             href="/catalog"
             className="focus-ring flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[14px] font-medium text-ink-soft hover:bg-paper-dim hover:text-ink"

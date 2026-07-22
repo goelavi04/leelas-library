@@ -11,12 +11,12 @@ export default async function HomePage() {
 
   return (
     <div>
-      <section className="bg-accent px-4 py-24 text-center sm:px-6">
+      <section className="bg-accent px-4 py-14 text-center sm:px-6 sm:py-20 md:py-24">
         <div className="mx-auto max-w-xl">
-          <h1 className="font-display text-2xl font-bold leading-tight text-white text-balance sm:text-3xl">
+          <h1 className="font-display text-xl font-bold leading-tight text-white text-balance sm:text-2xl md:text-3xl">
             A home for every story we&rsquo;ve collected — where every book finds its reader.
           </h1>
-          <p className="mt-4 text-[16.5px] text-white/80">
+          <p className="mt-4 text-[15px] text-white/80 sm:text-[16.5px]">
             Browse the shelves, see what&rsquo;s in, and keep track of what you&rsquo;re reading —
             all in one place.
           </p>
