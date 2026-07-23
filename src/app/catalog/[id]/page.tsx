@@ -1,10 +1,11 @@
-import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getSession } from "@/lib/auth";
 import { coverImageUrl } from "@/lib/books";
 import { StatusBadge } from "@/components/status-badge";
+import { BackButton } from "@/components/back-button";
+import { ExportPdfButton } from "@/components/export-pdf-button";
 import { format } from "date-fns";
 
 export default async function BookDetailPage({
@@ -50,9 +51,7 @@ export default async function BookDetailPage({
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6">
-      <Link href="/catalog" className="focus-ring text-[13.5px] font-semibold text-ink-soft hover:text-accent">
-        ← Back to catalog
-      </Link>
+      <BackButton fallbackHref="/catalog" label="Back to catalog" />
 
       <div className="mt-6 flex flex-col gap-8 sm:flex-row">
         <div className="flex w-full max-w-[220px] flex-shrink-0 items-center justify-center overflow-hidden rounded-xl border border-line bg-accent-soft shadow-card">
@@ -104,7 +103,21 @@ export default async function BookDetailPage({
 
       {isAdmin && (
         <div className="mt-12">
-          <h2 className="text-xl font-semibold tracking-tight text-ink">Borrow history</h2>
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <h2 className="text-xl font-semibold tracking-tight text-ink">Borrow history</h2>
+            <ExportPdfButton
+              title={`Borrow history — ${book.title}`}
+              subtitle={`${book.author} · Exported ${format(new Date(), "MMM d, yyyy")}`}
+              columns={["Borrower", "Checked out", "Due", "Returned"]}
+              rows={loanHistory.map((loan) => [
+                loan.profiles?.full_name ?? loan.borrower_name ?? "Unknown",
+                format(new Date(loan.checked_out_at), "MMM d, yyyy"),
+                format(new Date(loan.due_date), "MMM d, yyyy"),
+                loan.returned_at ? format(new Date(loan.returned_at), "MMM d, yyyy") : "Not yet returned",
+              ])}
+              filename={`borrow-history-${book.title.toLowerCase().replace(/\s+/g, "-")}.pdf`}
+            />
+          </div>
           {loanHistory.length === 0 ? (
             <p className="mt-3 text-ink-soft">This book has never been borrowed.</p>
           ) : (

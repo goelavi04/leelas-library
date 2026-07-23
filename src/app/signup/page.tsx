@@ -11,6 +11,7 @@ import {
   primaryButtonClass,
   ErrorMessage,
 } from "@/components/auth-card";
+import { BackButton } from "@/components/back-button";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -26,10 +27,14 @@ export default function SignupPage() {
   const [accountType, setAccountType] = useState<"user" | "admin">("user");
 
   return (
-    <AuthCard
-      title="Create your account"
-      subtitle="Sign up to see your borrowing history and get book suggestions."
-    >
+    <>
+      <div className="mx-auto max-w-md px-4 pt-8 sm:px-0">
+        <BackButton fallbackHref="/" />
+      </div>
+      <AuthCard
+        title="Create your account"
+        subtitle="Sign up to see your borrowing history and get book suggestions."
+      >
       <form action={formAction} className="flex flex-col gap-5">
         {state.error && <ErrorMessage message={state.error} />}
 
@@ -99,6 +104,7 @@ export default function SignupPage() {
           </Link>
         </p>
       </form>
-    </AuthCard>
+      </AuthCard>
+    </>
   );
 }

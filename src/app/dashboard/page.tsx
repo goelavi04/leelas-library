@@ -7,6 +7,8 @@ import { getYouMightLike } from "@/lib/recommendations";
 import { coverImageUrl } from "@/lib/books";
 import { BookCard } from "@/components/book-card";
 import { AlertTriangleIcon, ClockIcon, TrendingUpIcon } from "@/components/icons";
+import { BackButton } from "@/components/back-button";
+import { ExportPdfButton } from "@/components/export-pdf-button";
 
 export const metadata = { title: "My Books" };
 
@@ -38,7 +40,8 @@ export default async function DashboardPage() {
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6">
-      <h1 className="text-3xl font-bold tracking-tight text-ink">
+      <BackButton fallbackHref="/" />
+      <h1 className="mt-3 text-3xl font-bold tracking-tight text-ink">
         Hello, {session.profile.full_name?.split(" ")[0] ?? "there"}
       </h1>
 
@@ -60,7 +63,19 @@ export default async function DashboardPage() {
       </div>
 
       <section className="mt-12">
-        <h2 className="text-xl font-semibold tracking-tight text-ink">Currently borrowed</h2>
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <h2 className="text-xl font-semibold tracking-tight text-ink">Currently borrowed</h2>
+          <ExportPdfButton
+            title="Currently Borrowed"
+            subtitle={`${session.profile.full_name ?? "Borrower"} · Exported ${format(new Date(), "MMM d, yyyy")}`}
+            columns={["Book", "Due date"]}
+            rows={active.map((loan) => [
+              loan.books?.title ?? "Unknown book",
+              format(new Date(loan.due_date), "MMM d, yyyy"),
+            ])}
+            filename="currently-borrowed.pdf"
+          />
+        </div>
         {active.length === 0 ? (
           <p className="mt-3 text-ink-soft">You don&rsquo;t have any books checked out right now.</p>
         ) : (
@@ -122,7 +137,20 @@ export default async function DashboardPage() {
       )}
 
       <section className="mt-12">
-        <h2 className="text-xl font-semibold tracking-tight text-ink">Borrowing history</h2>
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <h2 className="text-xl font-semibold tracking-tight text-ink">Borrowing history</h2>
+          <ExportPdfButton
+            title="Borrowing History"
+            subtitle={`${session.profile.full_name ?? "Borrower"} · Exported ${format(new Date(), "MMM d, yyyy")}`}
+            columns={["Book", "Checked out", "Returned"]}
+            rows={past.map((loan) => [
+              loan.books?.title ?? "Unknown book",
+              format(new Date(loan.checked_out_at), "MMM d, yyyy"),
+              loan.returned_at ? format(new Date(loan.returned_at), "MMM d, yyyy") : "",
+            ])}
+            filename="borrowing-history.pdf"
+          />
+        </div>
         {past.length === 0 ? (
           <p className="mt-3 text-ink-soft">No past borrows yet.</p>
         ) : (

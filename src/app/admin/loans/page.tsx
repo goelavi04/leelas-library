@@ -3,7 +3,9 @@ import { format } from "date-fns";
 import { createClient } from "@/lib/supabase/server";
 import { isOverdue, isDueSoon } from "@/lib/loans";
 import { markReturned } from "@/app/admin/loans/actions";
-import { AlertTriangleIcon, ClockIcon, PlusIcon, TrendingUpIcon } from "@/components/icons";
+import { AlertTriangleIcon, ClockIcon, FileTextIcon, PlusIcon, TrendingUpIcon } from "@/components/icons";
+import { BackButton } from "@/components/back-button";
+import { ExportPdfButton } from "@/components/export-pdf-button";
 
 export const metadata = { title: "Borrow & Return" };
 
@@ -33,20 +35,43 @@ export default async function AdminLoansPage() {
 
   return (
     <div>
-      <div className="flex flex-wrap items-center justify-between gap-4">
+      <BackButton fallbackHref="/admin" />
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-ink">Borrow &amp; Return</h1>
           <p className="mt-2 text-ink-soft">
             {loans.length} {loans.length === 1 ? "book" : "books"} currently out
           </p>
         </div>
-        <Link
-          href="/admin/loans/new"
-          className="focus-ring flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-[14.5px] font-semibold text-white shadow-card hover:bg-accent-hover"
-        >
-          <PlusIcon className="h-4 w-4" />
-          Check Out a Book
-        </Link>
+        <div className="flex flex-wrap items-center gap-3">
+          <Link
+            href="/admin/loans/history"
+            className="focus-ring flex items-center gap-2 rounded-lg border border-line px-4 py-2 text-[13.5px] font-semibold text-ink-soft hover:bg-paper-dim"
+          >
+            <FileTextIcon className="h-4 w-4" />
+            View History
+          </Link>
+          <ExportPdfButton
+            title="Borrow & Return — Currently Out"
+            subtitle={`Exported ${format(new Date(), "MMM d, yyyy")}`}
+            columns={["Book", "Shelf", "Borrower", "Checked out", "Due date"]}
+            rows={loans.map((loan) => [
+              loan.books?.title ?? "Unknown book",
+              loan.books?.shelf_location ?? "—",
+              loan.profiles?.full_name ?? loan.borrower_name ?? "Unknown",
+              format(new Date(loan.checked_out_at), "MMM d, yyyy"),
+              format(new Date(loan.due_date), "MMM d, yyyy"),
+            ])}
+            filename="active-loans.pdf"
+          />
+          <Link
+            href="/admin/loans/new"
+            className="focus-ring flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-[14.5px] font-semibold text-white shadow-card hover:bg-accent-hover"
+          >
+            <PlusIcon className="h-4 w-4" />
+            Check Out a Book
+          </Link>
+        </div>
       </div>
 
       <div className="mt-8 overflow-x-auto rounded-xl border border-line shadow-card">

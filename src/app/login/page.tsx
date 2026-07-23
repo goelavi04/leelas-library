@@ -13,6 +13,7 @@ import {
   primaryButtonClass,
   ErrorMessage,
 } from "@/components/auth-card";
+import { BackButton } from "@/components/back-button";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -46,7 +47,11 @@ export default function LoginPage() {
   }
 
   return (
-    <AuthCard title="Log in" subtitle="Welcome back to Leela's Library.">
+    <>
+      <div className="mx-auto max-w-md px-4 pt-8 sm:px-0">
+        <BackButton fallbackHref="/" />
+      </div>
+      <AuthCard title="Log in" subtitle="Welcome back to Leela's Library.">
       <form onSubmit={handleSubmit} className="flex flex-col gap-5">
         {error && <ErrorMessage message={error} />}
 
@@ -87,6 +92,7 @@ export default function LoginPage() {
           </p>
         </div>
       </form>
-    </AuthCard>
+      </AuthCard>
+    </>
   );
 }

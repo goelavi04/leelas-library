@@ -2,6 +2,8 @@ import { createClient } from "@/lib/supabase/server";
 import { format } from "date-fns";
 import { requireAdmin } from "@/lib/auth";
 import { setUserRole } from "@/app/admin/users/actions";
+import { BackButton } from "@/components/back-button";
+import { ExportPdfButton } from "@/components/export-pdf-button";
 
 export const metadata = { title: "Users" };
 
@@ -15,8 +17,24 @@ export default async function AdminUsersPage() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold tracking-tight text-ink">Users</h1>
-      <p className="mt-2 text-ink-soft">{users?.length ?? 0} people with an account</p>
+      <BackButton fallbackHref="/admin" />
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-ink">Users</h1>
+          <p className="mt-2 text-ink-soft">{users?.length ?? 0} people with an account</p>
+        </div>
+        <ExportPdfButton
+          title="Users"
+          columns={["Name", "Email", "Role", "Joined"]}
+          rows={(users ?? []).map((user) => [
+            user.full_name ?? "—",
+            user.email ?? "—",
+            user.role,
+            format(new Date(user.created_at), "MMM d, yyyy"),
+          ])}
+          filename="users.pdf"
+        />
+      </div>
 
       <div className="mt-8 overflow-x-auto rounded-xl border border-line shadow-card">
         <table className="w-full min-w-[650px] text-left text-[14.5px]">

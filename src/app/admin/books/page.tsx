@@ -3,6 +3,8 @@ import { createClient } from "@/lib/supabase/server";
 import { searchBooks, PAGE_SIZE } from "@/lib/books";
 import { StatusBadge } from "@/components/status-badge";
 import { PencilIcon, PlusIcon, SearchIcon, TrashIcon } from "@/components/icons";
+import { BackButton } from "@/components/back-button";
+import { ExportPdfButton } from "@/components/export-pdf-button";
 
 export const metadata = { title: "Manage Books" };
 
@@ -21,20 +23,35 @@ export default async function AdminBooksPage({
 
   return (
     <div>
-      <div className="flex flex-wrap items-center justify-between gap-4">
+      <BackButton fallbackHref="/admin" />
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-ink">Manage Books</h1>
           <p className="mt-2 text-ink-soft">
             {total} {total === 1 ? "book" : "books"} total
           </p>
         </div>
-        <Link
-          href="/admin/books/new"
-          className="focus-ring flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-[14.5px] font-semibold text-white shadow-card hover:bg-accent-hover"
-        >
-          <PlusIcon className="h-4 w-4" />
-          Add a Book
-        </Link>
+        <div className="flex flex-wrap items-center gap-3">
+          <ExportPdfButton
+            title="Manage Books"
+            columns={["Title", "Author", "Genre", "Shelf", "Status"]}
+            rows={books.map((book) => [
+              book.title,
+              book.author,
+              book.genre ?? "—",
+              book.shelf_location ?? "—",
+              book.status === "available" ? "Available" : "Checked out",
+            ])}
+            filename="books.pdf"
+          />
+          <Link
+            href="/admin/books/new"
+            className="focus-ring flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-[14.5px] font-semibold text-white shadow-card hover:bg-accent-hover"
+          >
+            <PlusIcon className="h-4 w-4" />
+            Add a Book
+          </Link>
+        </div>
       </div>
 
       <form method="get" action="/admin/books" className="mt-6 flex gap-3">

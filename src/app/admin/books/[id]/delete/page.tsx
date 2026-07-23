@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { confirmDeleteBook } from "@/app/admin/books/actions";
 import { DeleteBookConfirm } from "@/components/delete-book-confirm";
+import { BackButton } from "@/components/back-button";
 
 export const metadata = { title: "Delete Book" };
 
@@ -14,5 +15,12 @@ export default async function DeleteBookPage({ params }: { params: Promise<{ id:
 
   const boundDelete = confirmDeleteBook.bind(null, book.id);
 
-  return <DeleteBookConfirm bookTitle={book.title} action={boundDelete} />;
+  return (
+    <div>
+      <BackButton fallbackHref="/admin/books" />
+      <div className="mt-3">
+        <DeleteBookConfirm bookTitle={book.title} action={boundDelete} />
+      </div>
+    </div>
+  );
 }

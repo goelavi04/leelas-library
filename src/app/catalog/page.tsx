@@ -3,6 +3,8 @@ import { createClient } from "@/lib/supabase/server";
 import { searchBooks, coverImageUrl, PAGE_SIZE } from "@/lib/books";
 import { BookCard } from "@/components/book-card";
 import { SearchIcon } from "@/components/icons";
+import { BackButton } from "@/components/back-button";
+import { ExportPdfButton } from "@/components/export-pdf-button";
 
 export const metadata = { title: "Catalog" };
 
@@ -35,10 +37,27 @@ export default async function CatalogPage({
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-      <h1 className="text-3xl font-bold tracking-tight text-ink">Catalog</h1>
-      <p className="mt-2 text-ink-soft">
-        {total} {total === 1 ? "book" : "books"} in the library
-      </p>
+      <BackButton fallbackHref="/" />
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-ink">Catalog</h1>
+          <p className="mt-2 text-ink-soft">
+            {total} {total === 1 ? "book" : "books"} in the library
+          </p>
+        </div>
+        <ExportPdfButton
+          title="Catalog"
+          subtitle={query ? `Search: "${query}"` : undefined}
+          columns={["Title", "Author", "Genre", "Status"]}
+          rows={books.map((book) => [
+            book.title,
+            book.author,
+            book.genre ?? "—",
+            book.status === "available" ? "Available" : "Checked out",
+          ])}
+          filename="catalog.pdf"
+        />
+      </div>
 
       <form method="get" action="/catalog" className="mt-6 flex flex-wrap items-center gap-3">
         <label htmlFor="q" className="sr-only">

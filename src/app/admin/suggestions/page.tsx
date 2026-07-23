@@ -1,5 +1,7 @@
 import { format } from "date-fns";
 import { createClient } from "@/lib/supabase/server";
+import { BackButton } from "@/components/back-button";
+import { ExportPdfButton } from "@/components/export-pdf-button";
 
 export const metadata = { title: "Suggested Acquisitions" };
 
@@ -19,17 +21,28 @@ export default async function SuggestionsPage() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold tracking-tight text-ink">Suggested Acquisitions</h1>
+      <BackButton fallbackHref="/admin" />
+      <h1 className="mt-3 text-3xl font-bold tracking-tight text-ink">Suggested Acquisitions</h1>
       <p className="mt-2 text-ink-soft">
         Two simple, real signals for what to buy next — grounded in what people actually searched
         for and borrowed, not guesses.
       </p>
 
       <section className="mt-10">
-        <h2 className="text-lg font-semibold tracking-tight text-ink">Searches that found nothing</h2>
-        <p className="mt-1 text-[14.5px] text-ink-soft">
-          People searched for these and the catalog had no matches.
-        </p>
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h2 className="text-lg font-semibold tracking-tight text-ink">Searches that found nothing</h2>
+            <p className="mt-1 text-[14.5px] text-ink-soft">
+              People searched for these and the catalog had no matches.
+            </p>
+          </div>
+          <ExportPdfButton
+            title="Zero-Result Searches"
+            columns={["Search", "When"]}
+            rows={(zeroResults ?? []).map((row) => [row.query, format(new Date(row.searched_at), "MMM d, yyyy")])}
+            filename="zero-result-searches.pdf"
+          />
+        </div>
         {!zeroResults || zeroResults.length === 0 ? (
           <p className="mt-4 text-ink-soft">No zero-result searches yet.</p>
         ) : (
@@ -55,10 +68,26 @@ export default async function SuggestionsPage() {
       </section>
 
       <section className="mt-12">
-        <h2 className="text-lg font-semibold tracking-tight text-ink">High demand, low availability</h2>
-        <p className="mt-1 text-[14.5px] text-ink-soft">
-          Genres that get borrowed often relative to how many copies exist — consider adding more.
-        </p>
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h2 className="text-lg font-semibold tracking-tight text-ink">High demand, low availability</h2>
+            <p className="mt-1 text-[14.5px] text-ink-soft">
+              Genres that get borrowed often relative to how many copies exist — consider adding more.
+            </p>
+          </div>
+          <ExportPdfButton
+            title="High Demand, Low Availability"
+            columns={["Genre", "Books in catalog", "Currently available", "Total borrows", "Demand ratio"]}
+            rows={topDemand.map((row) => [
+              row.genre,
+              row.total_books,
+              row.available_books,
+              row.total_borrows,
+              row.demand_ratio,
+            ])}
+            filename="genre-demand.pdf"
+          />
+        </div>
         {topDemand.length === 0 ? (
           <p className="mt-4 text-ink-soft">Not enough borrowing history yet to tell.</p>
         ) : (

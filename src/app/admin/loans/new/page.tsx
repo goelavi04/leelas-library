@@ -1,9 +1,9 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createLoan } from "@/app/admin/loans/actions";
 import { defaultDueDate } from "@/lib/loans";
 import { CheckoutForm } from "@/components/checkout-form";
+import { BackButton } from "@/components/back-button";
 
 export const metadata = { title: "Check Out a Book" };
 
@@ -30,12 +30,13 @@ export default async function NewLoanPage({
           <p className="mt-3 text-[15px] text-ink-soft">
             &ldquo;{book.title}&rdquo; is already checked out to someone else.
           </p>
-          <Link
-            href="/admin/loans"
-            className="mt-6 inline-block focus-ring text-[13.5px] font-semibold text-accent hover:underline"
-          >
-            ← Back to Borrow &amp; Return
-          </Link>
+          <div className="mt-6">
+            <BackButton
+              fallbackHref="/admin/loans"
+              label="Back to Borrow & Return"
+              className="focus-ring text-[13.5px] font-semibold text-accent hover:underline"
+            />
+          </div>
         </div>
       );
     }
@@ -51,9 +52,7 @@ export default async function NewLoanPage({
 
   return (
     <div className="max-w-2xl">
-      <Link href="/admin/loans" className="focus-ring text-[13.5px] font-semibold text-ink-soft hover:text-accent">
-        ← Back to Borrow &amp; Return
-      </Link>
+      <BackButton fallbackHref="/admin/loans" label="Back to Borrow & Return" />
       <h1 className="mt-3 text-2xl font-bold tracking-tight text-ink">Check Out a Book</h1>
 
       <div className="mt-8">
