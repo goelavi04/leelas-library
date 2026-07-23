@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { searchBooks, coverImageUrl, PAGE_SIZE } from "@/lib/books";
+import { searchBooks, coverImageUrl, PAGE_SIZE, looksLikeSqlInjection } from "@/lib/books";
 import { BookCard } from "@/components/book-card";
 import { SearchIcon } from "@/components/icons";
 import { BackButton } from "@/components/back-button";
@@ -21,7 +21,7 @@ export default async function CatalogPage({
   const supabase = await createClient();
   const { books, total } = await searchBooks(supabase, { query, availableOnly, page });
 
-  if (query && books.length === 0) {
+  if (query && books.length === 0 && !looksLikeSqlInjection(query)) {
     await supabase.from("zero_result_searches").insert({ query: query.slice(0, 200) });
   }
 

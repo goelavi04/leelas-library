@@ -8,6 +8,18 @@ export function sanitizeSearchTerm(term: string): string {
   return term.replace(/[,()%_]/g, "").trim();
 }
 
+// Supabase's query builder parameterizes every filter, so nothing typed into
+// search can actually run as SQL — this isn't a security boundary. It's just
+// a basic heuristic to stop obvious injection-probe strings (bots, scanners)
+// from being treated as real searches or polluting the zero-result-search
+// log that feeds Suggested Acquisitions.
+const SQL_INJECTION_PATTERN =
+  /(--|;|\/\*|\*\/)|\bdrop\s+table\b|\bunion\s+select\b|\bselect\b[\s\S]*\bfrom\b|\binsert\s+into\b|\bdelete\s+from\b|\bupdate\b[\s\S]*\bset\b|\bor\b\s*'?\d+'?\s*=\s*'?\d+/i;
+
+export function looksLikeSqlInjection(term: string): boolean {
+  return SQL_INJECTION_PATTERN.test(term);
+}
+
 export function coverImageUrl(
   supabase: SupabaseClient<Database>,
   path: string | null
@@ -24,6 +36,10 @@ export async function searchBooks(
     page,
   }: { query: string; availableOnly: boolean; page: number }
 ): Promise<{ books: Book[]; total: number }> {
+  if (looksLikeSqlInjection(query)) {
+    return { books: [], total: 0 };
+  }
+
   const from = (page - 1) * PAGE_SIZE;
   const to = from + PAGE_SIZE - 1;
 
