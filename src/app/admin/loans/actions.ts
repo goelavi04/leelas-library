@@ -19,10 +19,7 @@ export async function createLoan(
 
   const parsed = checkoutSchema.safeParse({
     bookId: String(formData.get("bookId") ?? ""),
-    borrowerType: String(formData.get("borrowerType") ?? ""),
-    borrowerUserId: String(formData.get("borrowerUserId") ?? ""),
-    borrowerName: String(formData.get("borrowerName") ?? ""),
-    borrowerContact: String(formData.get("borrowerContact") ?? ""),
+    memberId: String(formData.get("memberId") ?? ""),
     dueDate: String(formData.get("dueDate") ?? ""),
   });
 
@@ -39,9 +36,7 @@ export async function createLoan(
 
   const { error } = await supabase.from("loans").insert({
     book_id: parsed.data.bookId,
-    borrower_user_id: parsed.data.borrowerType === "registered" ? parsed.data.borrowerUserId || null : null,
-    borrower_name: parsed.data.borrowerType === "guest" ? parsed.data.borrowerName || null : null,
-    borrower_contact: parsed.data.borrowerType === "guest" ? parsed.data.borrowerContact || null : null,
+    member_id: parsed.data.memberId,
     due_date: parsed.data.dueDate,
     created_by: session.userId,
   });

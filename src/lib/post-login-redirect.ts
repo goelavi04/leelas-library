@@ -11,5 +11,5 @@ import type { Database } from "@/lib/supabase/types";
  */
 export async function postLoginPath(supabase: SupabaseClient<Database>, userId: string): Promise<string> {
   const { data: profile } = await supabase.from("profiles").select("role").eq("id", userId).single();
-  return profile?.role === "admin" ? "/admin" : "/dashboard";
+  return profile?.role === "admin" ? "/admin" : "/";
 }

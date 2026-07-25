@@ -5,7 +5,7 @@ import { setUserRole } from "@/app/admin/users/actions";
 import { BackButton } from "@/components/back-button";
 import { ExportPdfButton } from "@/components/export-pdf-button";
 
-export const metadata = { title: "Users" };
+export const metadata = { title: "Admin Accounts" };
 
 export default async function AdminUsersPage() {
   const session = await requireAdmin();
@@ -20,11 +20,11 @@ export default async function AdminUsersPage() {
       <BackButton fallbackHref="/admin" />
       <div className="mt-3 flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-ink">Users</h1>
-          <p className="mt-2 text-ink-soft">{users?.length ?? 0} people with an account</p>
+          <h1 className="text-3xl font-bold tracking-tight text-ink">Admin Accounts</h1>
+          <p className="mt-2 text-ink-soft">{users?.length ?? 0} people who can access this dashboard</p>
         </div>
         <ExportPdfButton
-          title="Users"
+          title="Admin Accounts"
           columns={["Name", "Email", "Role", "Joined"]}
           rows={(users ?? []).map((user) => [
             user.full_name ?? "—",
@@ -32,7 +32,7 @@ export default async function AdminUsersPage() {
             user.role,
             format(new Date(user.created_at), "MMM d, yyyy"),
           ])}
-          filename="users.pdf"
+          filename="admin-accounts.pdf"
         />
       </div>
 
@@ -89,7 +89,7 @@ export default async function AdminUsersPage() {
             {(users ?? []).length === 0 && (
               <tr>
                 <td colSpan={5} className="px-4 py-6 text-center text-ink-soft">
-                  No users yet.
+                  No admin accounts yet.
                 </td>
               </tr>
             )}

@@ -28,12 +28,6 @@ export default async function HomePage() {
               <SearchIcon className="h-4 w-4" />
               Browse the catalog
             </Link>
-            <Link
-              href="/signup"
-              className="focus-ring rounded-lg border border-white/35 px-5 py-2.5 text-[14.5px] font-semibold text-white hover:bg-white/10"
-            >
-              Create an account
-            </Link>
           </div>
         </div>
       </section>

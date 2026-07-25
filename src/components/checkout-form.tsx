@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import type { CheckoutFormState } from "@/app/admin/loans/actions";
 import { FormField, inputClass, ErrorMessage } from "@/components/auth-card";
@@ -23,18 +23,17 @@ export function CheckoutForm({
   bookId,
   bookLabel,
   availableBooks,
-  users,
+  members,
   defaultDueDate,
 }: {
   action: (prevState: CheckoutFormState, formData: FormData) => Promise<CheckoutFormState>;
   bookId?: string;
   bookLabel?: string;
   availableBooks: { id: string; title: string; author: string }[];
-  users: { id: string; full_name: string | null; email: string | null }[];
+  members: { id: string; full_name: string; email: string | null }[];
   defaultDueDate: string;
 }) {
   const [state, formAction] = useActionState<CheckoutFormState, FormData>(action, {});
-  const [borrowerType, setBorrowerType] = useState<"registered" | "guest">("registered");
 
   return (
     <form action={formAction} className="flex flex-col gap-6">
@@ -59,61 +58,27 @@ export function CheckoutForm({
         </FormField>
       )}
 
-      <fieldset className="flex flex-col gap-3">
-        <legend className="text-[15px] font-medium text-ink">Who is borrowing it?</legend>
-        <div className="flex gap-6">
-          <label className="flex items-center gap-2 text-[15px]">
-            <input
-              type="radio"
-              name="borrowerType"
-              value="registered"
-              checked={borrowerType === "registered"}
-              onChange={() => setBorrowerType("registered")}
-              className="h-5 w-5"
-            />
-            A registered user
-          </label>
-          <label className="flex items-center gap-2 text-[15px]">
-            <input
-              type="radio"
-              name="borrowerType"
-              value="guest"
-              checked={borrowerType === "guest"}
-              onChange={() => setBorrowerType("guest")}
-              className="h-5 w-5"
-            />
-            Someone without an account
-          </label>
-        </div>
-      </fieldset>
-
-      {borrowerType === "registered" ? (
-        <FormField label="Registered user" htmlFor="borrowerUserId">
-          <select id="borrowerUserId" name="borrowerUserId" className={inputClass}>
-            <option value="">Choose a person…</option>
-            {users.map((user) => (
-              <option key={user.id} value={user.id}>
-                {user.full_name ?? "Unnamed"} {user.email ? `(${user.email})` : ""}
+      <FormField label="Member" htmlFor="memberId">
+        {members.length === 0 ? (
+          <p className="text-[14px] text-ink-soft">
+            No members yet — add one from the{" "}
+            <a href="/admin/members/new" className="font-semibold text-accent hover:underline">
+              Members
+            </a>{" "}
+            page first.
+          </p>
+        ) : (
+          <select id="memberId" name="memberId" required className={inputClass}>
+            <option value="">Choose a member…</option>
+            {members.map((member) => (
+              <option key={member.id} value={member.id}>
+                {member.full_name} {member.email ? `(${member.email})` : ""}
               </option>
             ))}
           </select>
-          {state.fieldErrors?.borrowerUserId && (
-            <p className="text-sm text-critical">{state.fieldErrors.borrowerUserId}</p>
-          )}
-        </FormField>
-      ) : (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-          <FormField label="Borrower's name" htmlFor="borrowerName">
-            <input id="borrowerName" name="borrowerName" type="text" className={inputClass} />
-            {state.fieldErrors?.borrowerName && (
-              <p className="text-sm text-critical">{state.fieldErrors.borrowerName}</p>
-            )}
-          </FormField>
-          <FormField label="Contact (optional)" htmlFor="borrowerContact" hint="Phone or email">
-            <input id="borrowerContact" name="borrowerContact" type="text" className={inputClass} />
-          </FormField>
-        </div>
-      )}
+        )}
+        {state.fieldErrors?.memberId && <p className="text-sm text-critical">{state.fieldErrors.memberId}</p>}
+      </FormField>
 
       <FormField label="Due date" htmlFor="dueDate">
         <input id="dueDate" name="dueDate" type="date" defaultValue={defaultDueDate} required className={inputClass} />

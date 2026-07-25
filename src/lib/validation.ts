@@ -7,19 +7,12 @@ export const passwordSchema = z
   .min(8, "Password must be at least 8 characters.")
   .max(72, "Password is too long.");
 
-export const signupSchema = z
-  .object({
-    fullName: z.string().trim().min(1, "Enter your name.").max(200),
-    email: emailSchema,
-    password: passwordSchema,
-    accountType: z.enum(["user", "admin"]),
-    adminCode: z.string().trim().max(200).optional().or(z.literal("")),
-  })
-  .superRefine((data, ctx) => {
-    if (data.accountType === "admin" && !data.adminCode) {
-      ctx.addIssue({ code: "custom", path: ["adminCode"], message: "Enter the admin code." });
-    }
-  });
+export const signupSchema = z.object({
+  fullName: z.string().trim().min(1, "Enter your name.").max(200),
+  email: emailSchema,
+  password: passwordSchema,
+  adminCode: z.string().trim().min(1, "Enter the admin code.").max(200),
+});
 
 export const loginSchema = z.object({
   email: emailSchema,
@@ -44,30 +37,17 @@ export const bookSchema = z.object({
   notes: optionalText(2000),
 });
 
-export const checkoutSchema = z
-  .object({
-    bookId: z.string().uuid(),
-    borrowerType: z.enum(["registered", "guest"]),
-    borrowerUserId: z.string().uuid().optional().or(z.literal("")),
-    borrowerName: z.string().trim().max(200).optional().or(z.literal("")),
-    borrowerContact: z.string().trim().max(200).optional().or(z.literal("")),
-    dueDate: z.string().min(1, "Choose a due date."),
-  })
-  .superRefine((data, ctx) => {
-    if (data.borrowerType === "registered" && !data.borrowerUserId) {
-      ctx.addIssue({
-        code: "custom",
-        path: ["borrowerUserId"],
-        message: "Choose a registered borrower.",
-      });
-    }
-    if (data.borrowerType === "guest" && !data.borrowerName) {
-      ctx.addIssue({
-        code: "custom",
-        path: ["borrowerName"],
-        message: "Enter the borrower's name.",
-      });
-    }
-  });
+export const checkoutSchema = z.object({
+  bookId: z.string().uuid(),
+  memberId: z.string().uuid("Choose a member."),
+  dueDate: z.string().min(1, "Choose a due date."),
+});
+
+export const memberSchema = z.object({
+  fullName: z.string().trim().min(1, "Enter a name.").max(200),
+  email: optionalText(200),
+  phone: optionalText(50),
+  notes: optionalText(2000),
+});
 
 export const zeroResultQuerySchema = z.string().trim().min(1).max(200);

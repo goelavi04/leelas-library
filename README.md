@@ -202,17 +202,19 @@ Since there's no traditional REST API, here's the equivalent: every Server Actio
 
 | Action | What it does | Who can call it |
 |---|---|---|
-| `signupAction` | Creates an account; if "Admin" is chosen, verifies the shared admin code (rate-limited) before granting the role | Anyone |
+| `signupAction` | Creates an admin account, verifying the shared admin code (rate-limited) first | Anyone with the admin code |
 | `createBook` | Adds a new book, optionally with a cover image | Admin only |
+| `lookupBookByIsbn` | Looks up a scanned ISBN against Open Library / Google Books and returns title/author/genre/cover for the Add Book form to prefill | Admin only |
 | `updateBook` | Edits a book's details / replaces or removes its cover | Admin only |
 | `deleteBook` | Removes a book (blocked by the database if it's currently checked out) | Admin only |
-| `createLoan` | Checks a book out to a registered user or a guest, with a due date | Admin only |
+| `createMember` / `updateMember` / `deleteMember` | Manage the library's member directory (deleting is blocked if the member has a book checked out) | Admin only |
+| `createLoan` | Checks a book out to a member, with a due date | Admin only |
 | `markReturned` | Marks an active loan as returned | Admin only |
 | `parseImportAction` | Reads an uploaded `.csv`/`.xlsx`/`.pdf` file and returns a preview (nothing saved yet) | Admin only |
 | `confirmImportAction` | Saves the reviewed rows from the import preview as real books | Admin only |
-| `setUserRole` | Promotes or demotes another account between `user` and `admin` (can't be used on your own account) | Admin only |
+| `setUserRole` | Promotes or demotes another admin account (can't be used on your own account) | Admin only |
 
-Everything else (searching the catalog, viewing a book, viewing your own dashboard) is a normal page load — a Server Component reads directly from Supabase and renders the result, no separate action needed.
+Everything else (searching the catalog, viewing a book) is a normal page load — a Server Component reads directly from Supabase and renders the result, no separate action needed.
 
 ---
 
@@ -247,10 +249,9 @@ You'll need your own free [Supabase](https://supabase.com) project — run the S
 ```
 src/
   app/                  Pages and Server Actions, organized by route
-    admin/               Everything admin-only (books, loans, users, import, suggestions)
+    admin/               Everything admin-only (books, members, loans, admin accounts, import, suggestions)
     catalog/              Public book browsing and search
-    dashboard/            A logged-in user's own borrowing history
-    login/ signup/         Auth pages
+    login/ signup/         Admin auth pages
   components/            Shared, reusable UI pieces (header, forms, icons, etc.)
   lib/                   Shared logic (Supabase clients, validation rules, business logic)
 supabase/

@@ -12,6 +12,6 @@ export const config = {
      * optimization files, so the auth session cookie stays fresh
      * everywhere it matters without wasted work on static files.
      */
-    "/((?!_next/static|_next/image|favicon.ico|icons/|manifest.json|.*\\.(?:svg|png|jpg|jpeg|webp)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|icons/|manifest.json|sw\\.js|offline\\.html|.*\\.(?:svg|png|jpg|jpeg|webp)$).*)",
   ],
 };

@@ -38,9 +38,15 @@ export default function AdminHubPage() {
         />
         <AdminHubCard
           icon={UsersIcon}
+          href="/admin/members"
+          title="Members"
+          description="Add and manage the people who can borrow books."
+        />
+        <AdminHubCard
+          icon={UsersIcon}
           href="/admin/users"
-          title="Users"
-          description="View everyone with an account."
+          title="Admin Accounts"
+          description="See who can access this dashboard."
         />
       </div>
     </div>

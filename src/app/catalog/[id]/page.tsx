@@ -32,15 +32,15 @@ export default async function BookDetailPage({
     returned_at: string | null;
     borrower_name: string | null;
     borrower_contact: string | null;
-    borrower_user_id: string | null;
-    profiles: { full_name: string | null; email: string | null } | null;
+    member_id: string | null;
+    members: { full_name: string; email: string | null } | null;
   }[] = [];
 
   if (isAdmin) {
     const { data } = await supabase
       .from("loans")
       .select(
-        "id, checked_out_at, due_date, returned_at, borrower_name, borrower_contact, borrower_user_id, profiles:borrower_user_id (full_name, email)"
+        "id, checked_out_at, due_date, returned_at, borrower_name, borrower_contact, member_id, members:member_id (full_name, email)"
       )
       .eq("book_id", id)
       .order("checked_out_at", { ascending: false });
@@ -110,7 +110,7 @@ export default async function BookDetailPage({
               subtitle={`${book.author} · Exported ${format(new Date(), "MMM d, yyyy")}`}
               columns={["Borrower", "Checked out", "Due", "Returned"]}
               rows={loanHistory.map((loan) => [
-                loan.profiles?.full_name ?? loan.borrower_name ?? "Unknown",
+                loan.members?.full_name ?? loan.borrower_name ?? "Unknown",
                 format(new Date(loan.checked_out_at), "MMM d, yyyy"),
                 format(new Date(loan.due_date), "MMM d, yyyy"),
                 loan.returned_at ? format(new Date(loan.returned_at), "MMM d, yyyy") : "Not yet returned",
@@ -135,11 +135,11 @@ export default async function BookDetailPage({
                   {loanHistory.map((loan) => (
                     <tr key={loan.id} className="border-t border-line">
                       <td className="px-4 py-3">
-                        {loan.profiles?.full_name ?? loan.borrower_name ?? "Unknown"}
-                        {loan.profiles?.email && (
-                          <span className="block text-sm text-ink-soft">{loan.profiles.email}</span>
+                        {loan.members?.full_name ?? loan.borrower_name ?? "Unknown"}
+                        {loan.members?.email && (
+                          <span className="block text-sm text-ink-soft">{loan.members.email}</span>
                         )}
-                        {!loan.borrower_user_id && loan.borrower_contact && (
+                        {!loan.member_id && loan.borrower_contact && (
                           <span className="block text-sm text-ink-soft">{loan.borrower_contact}</span>
                         )}
                       </td>

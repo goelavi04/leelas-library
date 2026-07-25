@@ -29,7 +29,7 @@ type HistoryLoanRow = {
   borrower_name: string | null;
   borrower_contact: string | null;
   books: { id: string; title: string; author: string } | null;
-  profiles: { full_name: string | null; email: string | null } | null;
+  members: { full_name: string; email: string | null } | null;
 };
 
 const RANGE_LABELS: Record<Range, string> = {
@@ -81,7 +81,7 @@ export default async function LoanHistoryPage({
   const baseQuery = supabase
     .from("loans")
     .select(
-      "id, due_date, checked_out_at, returned_at, borrower_name, borrower_contact, books:book_id (id, title, author), profiles:borrower_user_id (full_name, email)"
+      "id, due_date, checked_out_at, returned_at, borrower_name, borrower_contact, books:book_id (id, title, author), members:member_id (full_name, email)"
     );
 
   const filteredQuery = bounds
@@ -118,7 +118,7 @@ export default async function LoanHistoryPage({
           columns={["Book", "Borrower", "Checked out", "Due date", "Returned", "Status"]}
           rows={loans.map((loan) => [
             loan.books?.title ?? "Unknown book",
-            loan.profiles?.full_name ?? loan.borrower_name ?? "Unknown",
+            loan.members?.full_name ?? loan.borrower_name ?? "Unknown",
             format(new Date(loan.checked_out_at), "MMM d, yyyy"),
             format(new Date(loan.due_date), "MMM d, yyyy"),
             loan.returned_at ? format(new Date(loan.returned_at), "MMM d, yyyy") : "—",
@@ -193,11 +193,11 @@ export default async function LoanHistoryPage({
                     )}
                   </td>
                   <td className="px-4 py-3 text-ink-soft">
-                    {loan.profiles?.full_name ?? loan.borrower_name ?? "Unknown"}
-                    {loan.profiles?.email && (
-                      <span className="block text-sm text-ink-soft">{loan.profiles.email}</span>
+                    {loan.members?.full_name ?? loan.borrower_name ?? "Unknown"}
+                    {loan.members?.email && (
+                      <span className="block text-sm text-ink-soft">{loan.members.email}</span>
                     )}
-                    {!loan.profiles && loan.borrower_contact && (
+                    {!loan.members && loan.borrower_contact && (
                       <span className="block text-sm text-ink-soft">{loan.borrower_contact}</span>
                     )}
                   </td>

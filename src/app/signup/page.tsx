@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import Link from "next/link";
 import { signupAction, type SignupState } from "@/app/signup/actions";
@@ -24,7 +24,6 @@ function SubmitButton() {
 
 export default function SignupPage() {
   const [state, formAction] = useActionState<SignupState, FormData>(signupAction, {});
-  const [accountType, setAccountType] = useState<"user" | "admin">("user");
 
   return (
     <>
@@ -32,8 +31,8 @@ export default function SignupPage() {
         <BackButton fallbackHref="/" />
       </div>
       <AuthCard
-        title="Create your account"
-        subtitle="Sign up to see your borrowing history and get book suggestions."
+        title="Create an admin account"
+        subtitle="Ask an existing admin for the admin code to get access."
       >
       <form action={formAction} className="flex flex-col gap-5">
         {state.error && <ErrorMessage message={state.error} />}
@@ -60,40 +59,10 @@ export default function SignupPage() {
           {state.fieldErrors?.password && <p className="text-sm text-critical">{state.fieldErrors.password}</p>}
         </FormField>
 
-        <fieldset className="flex flex-col gap-3">
-          <legend className="text-[13px] font-semibold text-ink-soft">Account type</legend>
-          <div className="flex gap-6">
-            <label className="flex items-center gap-2 text-[15px]">
-              <input
-                type="radio"
-                name="accountType"
-                value="user"
-                checked={accountType === "user"}
-                onChange={() => setAccountType("user")}
-                className="h-5 w-5"
-              />
-              User
-            </label>
-            <label className="flex items-center gap-2 text-[15px]">
-              <input
-                type="radio"
-                name="accountType"
-                value="admin"
-                checked={accountType === "admin"}
-                onChange={() => setAccountType("admin")}
-                className="h-5 w-5"
-              />
-              Admin
-            </label>
-          </div>
-        </fieldset>
-
-        {accountType === "admin" && (
-          <FormField label="Admin code" htmlFor="adminCode" hint="Ask an existing admin for this code.">
-            <input id="adminCode" name="adminCode" type="password" autoComplete="off" className={inputClass} />
-            {state.fieldErrors?.adminCode && <p className="text-sm text-critical">{state.fieldErrors.adminCode}</p>}
-          </FormField>
-        )}
+        <FormField label="Admin code" htmlFor="adminCode" hint="Ask an existing admin for this code.">
+          <input id="adminCode" name="adminCode" type="password" autoComplete="off" required className={inputClass} />
+          {state.fieldErrors?.adminCode && <p className="text-sm text-critical">{state.fieldErrors.adminCode}</p>}
+        </FormField>
 
         <SubmitButton />
 

@@ -17,7 +17,7 @@ type ActiveLoanRow = {
   borrower_name: string | null;
   borrower_contact: string | null;
   books: { id: string; title: string; author: string; genre: string | null; shelf_location: string | null } | null;
-  profiles: { full_name: string | null; email: string | null } | null;
+  members: { full_name: string; email: string | null } | null;
 };
 
 export default async function AdminLoansPage() {
@@ -26,7 +26,7 @@ export default async function AdminLoansPage() {
   const { data } = await supabase
     .from("loans")
     .select(
-      "id, due_date, checked_out_at, returned_at, borrower_name, borrower_contact, books:book_id (id, title, author, genre, shelf_location), profiles:borrower_user_id (full_name, email)"
+      "id, due_date, checked_out_at, returned_at, borrower_name, borrower_contact, books:book_id (id, title, author, genre, shelf_location), members:member_id (full_name, email)"
     )
     .is("returned_at", null)
     .order("due_date", { ascending: true });
@@ -58,7 +58,7 @@ export default async function AdminLoansPage() {
             rows={loans.map((loan) => [
               loan.books?.title ?? "Unknown book",
               loan.books?.shelf_location ?? "—",
-              loan.profiles?.full_name ?? loan.borrower_name ?? "Unknown",
+              loan.members?.full_name ?? loan.borrower_name ?? "Unknown",
               format(new Date(loan.checked_out_at), "MMM d, yyyy"),
               format(new Date(loan.due_date), "MMM d, yyyy"),
             ])}
@@ -107,11 +107,11 @@ export default async function AdminLoansPage() {
                   </td>
                   <td className="px-4 py-3 text-ink-soft">{loan.books?.shelf_location ?? "—"}</td>
                   <td className="px-4 py-3 text-ink-soft">
-                    {loan.profiles?.full_name ?? loan.borrower_name ?? "Unknown"}
-                    {loan.profiles?.email && (
-                      <span className="block text-sm text-ink-soft">{loan.profiles.email}</span>
+                    {loan.members?.full_name ?? loan.borrower_name ?? "Unknown"}
+                    {loan.members?.email && (
+                      <span className="block text-sm text-ink-soft">{loan.members.email}</span>
                     )}
-                    {!loan.profiles && loan.borrower_contact && (
+                    {!loan.members && loan.borrower_contact && (
                       <span className="block text-sm text-ink-soft">{loan.borrower_contact}</span>
                     )}
                   </td>

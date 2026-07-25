@@ -6,6 +6,7 @@ import { requireAdmin } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { bookSchema } from "@/lib/validation";
 import { uploadCoverImage, deleteCoverImage } from "@/lib/storage";
+import { lookupBook, normalizeIsbn, type BookLookupResult } from "@/lib/book-lookup";
 
 export interface BookFormState {
   error?: string;
@@ -165,6 +166,28 @@ export async function deleteBook(bookId: string): Promise<DeleteState> {
   revalidatePath("/admin/books");
   revalidatePath("/catalog");
   redirect("/admin/books");
+}
+
+export interface IsbnLookupState {
+  data?: BookLookupResult;
+  isbn?: string;
+  error?: string;
+}
+
+export async function lookupBookByIsbn(rawIsbn: string): Promise<IsbnLookupState> {
+  await requireAdmin();
+
+  const isbn = normalizeIsbn(rawIsbn);
+  if (!isbn) {
+    return { error: "That doesn't look like a valid ISBN barcode." };
+  }
+
+  const result = await lookupBook(isbn);
+  if (!result) {
+    return { error: "No match found for this barcode — you can still enter the details manually.", isbn };
+  }
+
+  return { data: result, isbn };
 }
 
 /** Wrapper matching the (prevState, formData) shape useActionState expects. */

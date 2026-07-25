@@ -43,11 +43,11 @@ export default async function NewLoanPage({
     bookLabel = `${book.title} — ${book.author}`;
   }
 
-  const [{ data: availableBooks }, { data: users }] = await Promise.all([
+  const [{ data: availableBooks }, { data: members }] = await Promise.all([
     bookId
       ? Promise.resolve({ data: [] })
       : supabase.from("books").select("id, title, author").eq("status", "available").order("title"),
-    supabase.from("profiles").select("id, full_name, email").order("full_name"),
+    supabase.from("members").select("id, full_name, email").order("full_name"),
   ]);
 
   return (
@@ -61,7 +61,7 @@ export default async function NewLoanPage({
           bookId={bookId}
           bookLabel={bookLabel}
           availableBooks={availableBooks ?? []}
-          users={users ?? []}
+          members={members ?? []}
           defaultDueDate={defaultDueDate()}
         />
       </div>

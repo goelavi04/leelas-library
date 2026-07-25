@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import type { Role } from "@/lib/supabase/types";
 import { LogoutButton } from "@/components/logout-button";
-import { BookIcon, ClockIcon, GridIcon, MenuIcon, XIcon } from "@/components/icons";
+import { BookIcon, GridIcon, MenuIcon, XIcon } from "@/components/icons";
 
 const linkClass =
   "focus-ring flex items-center gap-2 rounded-lg px-3 py-2.5 text-[15px] font-medium text-ink-soft hover:bg-paper-dim hover:text-ink";
@@ -54,12 +54,6 @@ export function MobileNav({
               <BookIcon className="h-4 w-4" />
               Catalog
             </Link>
-            {session && (
-              <Link href="/dashboard" onClick={close} className={linkClass}>
-                <ClockIcon className="h-4 w-4" />
-                My Books
-              </Link>
-            )}
             {isAdmin && (
               <Link href="/admin" onClick={close} className={linkClass}>
                 <GridIcon className="h-4 w-4" />

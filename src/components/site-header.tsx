@@ -2,7 +2,7 @@ import Link from "next/link";
 import { getSession } from "@/lib/auth";
 import { AccountMenu } from "@/components/account-menu";
 import { MobileNav } from "@/components/mobile-nav";
-import { BookIcon, ClockIcon, GridIcon } from "@/components/icons";
+import { BookIcon, GridIcon } from "@/components/icons";
 
 export async function SiteHeader() {
   const session = await getSession();
@@ -35,16 +35,6 @@ export async function SiteHeader() {
             <BookIcon className="h-4 w-4" />
             Catalog
           </Link>
-
-          {session && (
-            <Link
-              href="/dashboard"
-              className="focus-ring flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[14px] font-medium text-ink-soft hover:bg-paper-dim hover:text-ink"
-            >
-              <ClockIcon className="h-4 w-4" />
-              My Books
-            </Link>
-          )}
 
           {session?.profile.role === "admin" && (
             <Link

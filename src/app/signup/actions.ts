@@ -26,7 +26,6 @@ export async function signupAction(_prevState: SignupState, formData: FormData):
     fullName: String(formData.get("fullName") ?? ""),
     email: String(formData.get("email") ?? ""),
     password: String(formData.get("password") ?? ""),
-    accountType: String(formData.get("accountType") ?? "user"),
     adminCode: String(formData.get("adminCode") ?? ""),
   });
 
@@ -39,34 +38,32 @@ export async function signupAction(_prevState: SignupState, formData: FormData):
     return { error: "Please fix the highlighted fields.", fieldErrors };
   }
 
-  const { fullName, email, password, accountType, adminCode } = parsed.data;
+  const { fullName, email, password, adminCode } = parsed.data;
 
-  if (accountType === "admin") {
-    // Vercel functions are stateless between invocations, so this has to
-    // be tracked in the database rather than an in-memory counter — see
-    // 0004_admin_code_rate_limit.sql.
-    const admin = createAdminClient();
-    const ip = await getClientIp();
-    const windowStart = new Date(Date.now() - ADMIN_CODE_WINDOW_MINUTES * 60 * 1000).toISOString();
+  // Vercel functions are stateless between invocations, so this has to be
+  // tracked in the database rather than an in-memory counter — see
+  // 0004_admin_code_rate_limit.sql.
+  const admin = createAdminClient();
+  const ip = await getClientIp();
+  const windowStart = new Date(Date.now() - ADMIN_CODE_WINDOW_MINUTES * 60 * 1000).toISOString();
 
-    const { count } = await admin
-      .from("admin_code_attempts")
-      .select("id", { count: "exact", head: true })
-      .eq("ip", ip)
-      .gte("attempted_at", windowStart);
+  const { count } = await admin
+    .from("admin_code_attempts")
+    .select("id", { count: "exact", head: true })
+    .eq("ip", ip)
+    .gte("attempted_at", windowStart);
 
-    if ((count ?? 0) >= MAX_ADMIN_CODE_ATTEMPTS) {
-      return { error: "Too many admin code attempts. Please try again in a few minutes." };
-    }
+  if ((count ?? 0) >= MAX_ADMIN_CODE_ATTEMPTS) {
+    return { error: "Too many admin code attempts. Please try again in a few minutes." };
+  }
 
-    const expectedCode = process.env.ADMIN_SIGNUP_CODE;
-    if (!expectedCode || adminCode !== expectedCode) {
-      await admin.from("admin_code_attempts").insert({ ip });
-      return {
-        error: "Please fix the highlighted fields.",
-        fieldErrors: { adminCode: "That admin code isn't right." },
-      };
-    }
+  const expectedCode = process.env.ADMIN_SIGNUP_CODE;
+  if (!expectedCode || adminCode !== expectedCode) {
+    await admin.from("admin_code_attempts").insert({ ip });
+    return {
+      error: "Please fix the highlighted fields.",
+      fieldErrors: { adminCode: "That admin code isn't right." },
+    };
   }
 
   const supabase = await createClient();
@@ -84,13 +81,12 @@ export async function signupAction(_prevState: SignupState, formData: FormData):
     };
   }
 
-  if (accountType === "admin" && data.user) {
+  if (data.user) {
     // handle_new_user() (0001_init.sql) already created the profile row
     // with role 'user'. prevent_role_self_escalation blocks a plain
     // UPDATE from anyone who isn't already an admin — it only guards
     // UPDATE, not INSERT — so replace the row via the service-role key
     // instead of trying to update it.
-    const admin = createAdminClient();
     await admin.from("profiles").delete().eq("id", data.user.id);
     await admin.from("profiles").insert({
       id: data.user.id,
@@ -104,5 +100,5 @@ export async function signupAction(_prevState: SignupState, formData: FormData):
   // Sign In / Providers > Email > "Confirm email" off), so signUp() above
   // already returns an active session — go straight in instead of
   // bouncing through an email-based verification step.
-  redirect(accountType === "admin" ? "/admin" : "/dashboard");
+  redirect("/admin");
 }

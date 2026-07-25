@@ -17,8 +17,8 @@ export interface SessionInfo {
  *
  * Wrapped in React's cache() so the auth round trip runs once per request
  * no matter how many times it's called — the root layout (for the header)
- * and the page itself (via requireUser/requireAdmin) both call this on
- * every navigation, and without dedup that's two Supabase auth calls doing
+ * and the page itself (via requireAdmin) both call this on every
+ * navigation, and without dedup that's two Supabase auth calls doing
  * identical work on every single page load.
  */
 export const getSession = cache(async (): Promise<SessionInfo | null> => {
@@ -40,17 +40,10 @@ export const getSession = cache(async (): Promise<SessionInfo | null> => {
   return { userId: user.id, email: user.email ?? null, profile };
 });
 
-/** Use in Server Components/pages that require any logged-in user. */
-export async function requireUser(): Promise<SessionInfo> {
-  const session = await getSession();
-  if (!session) redirect("/login");
-  return session;
-}
-
 /** Use in Server Components/pages/actions that require the admin role. */
 export async function requireAdmin(): Promise<SessionInfo> {
   const session = await getSession();
   if (!session) redirect("/login");
-  if (session.profile.role !== "admin") redirect("/dashboard");
+  if (session.profile.role !== "admin") redirect("/");
   return session;
 }

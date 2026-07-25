@@ -18,6 +18,16 @@ export type Profile = {
   created_at: string;
 };
 
+export type Member = {
+  id: string;
+  full_name: string;
+  email: string | null;
+  phone: string | null;
+  notes: string | null;
+  created_at: string;
+  created_by: string | null;
+};
+
 export type Book = {
   id: string;
   title: string;
@@ -35,7 +45,7 @@ export type Book = {
 export type Loan = {
   id: string;
   book_id: string;
-  borrower_user_id: string | null;
+  member_id: string | null;
   borrower_name: string | null;
   borrower_contact: string | null;
   checked_out_at: string;
@@ -79,16 +89,22 @@ export type Database = {
         Update: Partial<Book>;
         Relationships: [];
       };
+      members: {
+        Row: Member;
+        Insert: Partial<Member> & { full_name: string };
+        Update: Partial<Member>;
+        Relationships: [];
+      };
       loans: {
         Row: Loan;
         Insert: Partial<Loan> & { book_id: string; due_date: string };
         Update: Partial<Loan>;
         Relationships: [
           {
-            foreignKeyName: "loans_borrower_user_id_fkey";
-            columns: ["borrower_user_id"];
+            foreignKeyName: "loans_member_id_fkey";
+            columns: ["member_id"];
             isOneToOne: false;
-            referencedRelation: "profiles";
+            referencedRelation: "members";
             referencedColumns: ["id"];
           },
           {
