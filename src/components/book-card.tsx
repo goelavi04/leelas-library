@@ -7,7 +7,7 @@ export function BookCard({ book, coverUrl }: { book: Book; coverUrl: string | nu
   return (
     <Link
       href={`/catalog/${book.id}`}
-      className="focus-ring group flex flex-col overflow-hidden rounded-xl border border-line shadow-card bg-paper transition hover:shadow-md hover:-translate-y-0.5"
+      className="focus-ring group flex flex-col overflow-hidden rounded-xl border border-line shadow-card bg-paper transition duration-150 ease-out hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:scale-[0.99] active:shadow-card"
     >
       <div className="flex aspect-[3/4] items-center justify-center bg-accent-soft">
         {coverUrl ? (

@@ -27,7 +27,7 @@ export function AdminHubCard({
   return (
     <Link
       href={href}
-      className="focus-ring group flex items-start gap-3.5 rounded-xl border border-line shadow-card bg-paper p-5 transition hover:shadow-md hover:-translate-y-0.5"
+      className="focus-ring group flex items-start gap-3.5 rounded-xl border border-line shadow-card bg-paper p-5 transition duration-150 ease-out hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:scale-[0.99] active:shadow-card"
     >
       <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${badgeClass[accent]}`}>
         <Icon className="h-5 w-5" />
@@ -56,7 +56,7 @@ export function AdminHubHero({
   return (
     <Link
       href={href}
-      className="focus-ring group flex items-center gap-5 rounded-2xl border border-accent/20 bg-gradient-to-br from-accent to-accent-hover p-6 shadow-card transition hover:shadow-lg hover:-translate-y-0.5 sm:p-7"
+      className="focus-ring group flex items-center gap-5 rounded-2xl border border-accent/20 bg-gradient-to-br from-accent to-accent-hover p-6 shadow-card transition duration-150 ease-out hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 active:scale-[0.99] active:shadow-card sm:p-7"
     >
       <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-white/15 text-white">
         <Icon className="h-7 w-7" strokeWidth={1.6} />

@@ -1,5 +1,6 @@
 import "server-only";
 import { cache } from "react";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import type { Profile } from "@/lib/supabase/types";
@@ -22,6 +23,14 @@ export interface SessionInfo {
  * identical work on every single page load.
  */
 export const getSession = cache(async (): Promise<SessionInfo | null> => {
+  // Anonymous visitors — everyone browsing the public catalog — have no
+  // Supabase auth cookie at all. Skip the network round trip to the Auth
+  // API entirely rather than asking it to confirm what the cookie jar
+  // already tells us: there's no one logged in.
+  const cookieStore = await cookies();
+  const hasAuthCookie = cookieStore.getAll().some((cookie) => cookie.name.startsWith("sb-") && cookie.name.includes("-auth-token"));
+  if (!hasAuthCookie) return null;
+
   const supabase = await createClient();
   const {
     data: { user },
