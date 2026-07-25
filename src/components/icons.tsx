@@ -208,6 +208,16 @@ export function FileTextIcon(props: IconProps) {
   );
 }
 
+export function ShieldIcon(props: IconProps) {
+  return base(
+    <>
+      <path d="M12 2 4 5v6c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V5z" />
+      <path d="m9 12 2 2 4-4" />
+    </>,
+    props
+  );
+}
+
 export function ScanIcon(props: IconProps) {
   return base(
     <>
