@@ -1,5 +1,5 @@
 import { AdminHubCard } from "@/components/admin-hub-card";
-import { BookIcon, ClockIcon, TrendingUpIcon, UploadIcon, UsersIcon } from "@/components/icons";
+import { BookIcon, ClockIcon, ScanIcon, TrendingUpIcon, UploadIcon, UsersIcon } from "@/components/icons";
 import { BackButton } from "@/components/back-button";
 
 export const metadata = { title: "Admin" };
@@ -13,10 +13,22 @@ export default function AdminHubPage() {
 
       <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
         <AdminHubCard
+          icon={ScanIcon}
+          href="/admin/books/new?scan=1"
+          title="Scan Barcode"
+          description="Scan a book's barcode with your camera to add it instantly."
+        />
+        <AdminHubCard
           icon={BookIcon}
           href="/admin/books"
           title="Manage Books"
           description="Add, edit, or remove books from the catalog."
+        />
+        <AdminHubCard
+          icon={UsersIcon}
+          href="/admin/members"
+          title="Members"
+          description="Add and manage the people who can borrow books."
         />
         <AdminHubCard
           icon={ClockIcon}
@@ -25,22 +37,16 @@ export default function AdminHubPage() {
           description="Check out books, mark returns, and see what's overdue."
         />
         <AdminHubCard
-          icon={UploadIcon}
-          href="/admin/import"
-          title="Import Books"
-          description="Add many books at once from a spreadsheet or PDF list."
-        />
-        <AdminHubCard
           icon={TrendingUpIcon}
           href="/admin/suggestions"
           title="Suggested Acquisitions"
           description="See what people are searching for and what's in high demand."
         />
         <AdminHubCard
-          icon={UsersIcon}
-          href="/admin/members"
-          title="Members"
-          description="Add and manage the people who can borrow books."
+          icon={UploadIcon}
+          href="/admin/import"
+          title="Import Books"
+          description="Add many books at once from a spreadsheet or PDF list."
         />
         <AdminHubCard
           icon={UsersIcon}

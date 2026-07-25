@@ -4,14 +4,20 @@ import { BackButton } from "@/components/back-button";
 
 export const metadata = { title: "Add a Book" };
 
-export default function NewBookPage() {
+export default async function NewBookPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ scan?: string }>;
+}) {
+  const { scan } = await searchParams;
+
   return (
     <div className="max-w-2xl">
       <BackButton fallbackHref="/admin/books" label="Back to Manage Books" />
       <h1 className="mt-3 text-2xl font-bold tracking-tight text-ink">Add a Book</h1>
 
       <div className="mt-8">
-        <BookForm action={createBook} submitLabel="Add book" savingLabel="Adding…" />
+        <BookForm action={createBook} submitLabel="Add book" savingLabel="Adding…" autoScan={scan === "1"} />
       </div>
     </div>
   );

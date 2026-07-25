@@ -34,6 +34,7 @@ export function BookForm({
   savingLabel,
   initialValues,
   existingCoverUrl,
+  autoScan,
 }: {
   action: (prevState: BookFormState, formData: FormData) => Promise<BookFormState>;
   submitLabel: string;
@@ -47,6 +48,7 @@ export function BookForm({
     notes: string | null;
   };
   existingCoverUrl?: string | null;
+  autoScan?: boolean;
 }) {
   const [state, formAction] = useActionState<BookFormState, FormData>(action, {});
 
@@ -56,7 +58,7 @@ export function BookForm({
   const isbnRef = useRef<HTMLInputElement>(null);
   const coverInputRef = useRef<HTMLInputElement>(null);
 
-  const [scanning, setScanning] = useState(false);
+  const [scanning, setScanning] = useState(!!autoScan);
   const [lookupState, setLookupState] = useState<IsbnLookupState | null>(null);
   const [looking, setLooking] = useState(false);
   const [scannedCoverPreview, setScannedCoverPreview] = useState<string | null>(null);
