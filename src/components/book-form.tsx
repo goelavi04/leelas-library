@@ -7,7 +7,8 @@ import type { BookFormState, IsbnLookupState } from "@/app/admin/books/actions";
 import { lookupBookByIsbn } from "@/app/admin/books/actions";
 import { FormField, inputClass, ErrorMessage } from "@/components/auth-card";
 import { BarcodeScanner } from "@/components/barcode-scanner";
-import { ScanIcon } from "@/components/icons";
+import { CameraCapture } from "@/components/camera-capture";
+import { CameraIcon, ScanIcon } from "@/components/icons";
 
 function SubmitButton({ label, savingLabel }: { label: string; savingLabel: string }) {
   const { pending } = useFormStatus();
@@ -61,7 +62,19 @@ export function BookForm({
   const [scanning, setScanning] = useState(!!autoScan);
   const [lookupState, setLookupState] = useState<IsbnLookupState | null>(null);
   const [looking, setLooking] = useState(false);
-  const [scannedCoverPreview, setScannedCoverPreview] = useState<string | null>(null);
+  const [capturedCoverPreview, setCapturedCoverPreview] = useState<string | null>(null);
+  const [capturingPhoto, setCapturingPhoto] = useState(false);
+
+  async function handleCapturedPhoto(dataUrl: string) {
+    setCapturingPhoto(false);
+    if (!coverInputRef.current) return;
+
+    const file = await dataUrlToFile(dataUrl, "cover.jpg");
+    const transfer = new DataTransfer();
+    transfer.items.add(file);
+    coverInputRef.current.files = transfer.files;
+    setCapturedCoverPreview(dataUrl);
+  }
 
   async function handleDetected(rawIsbn: string) {
     setScanning(false);
@@ -84,7 +97,7 @@ export function BookForm({
         const transfer = new DataTransfer();
         transfer.items.add(file);
         coverInputRef.current.files = transfer.files;
-        setScannedCoverPreview(result.data.coverDataUrl);
+        setCapturedCoverPreview(result.data.coverDataUrl);
       }
     }
   }
@@ -200,17 +213,17 @@ export function BookForm({
       </FormField>
 
       <FormField label="Cover image" htmlFor="cover" hint="Optional. JPG or PNG, any size — it will be resized automatically.">
-        {(scannedCoverPreview ?? existingCoverUrl) && (
+        {(capturedCoverPreview ?? existingCoverUrl) && (
           <div className="mb-2 flex items-center gap-4">
             <Image
-              src={scannedCoverPreview ?? existingCoverUrl!}
+              src={capturedCoverPreview ?? existingCoverUrl!}
               alt="Cover preview"
               width={80}
               height={107}
-              unoptimized={!!scannedCoverPreview}
+              unoptimized={!!capturedCoverPreview}
               className="rounded border border-line"
             />
-            {!scannedCoverPreview && existingCoverUrl && (
+            {!capturedCoverPreview && existingCoverUrl && (
               <label className="flex items-center gap-2 text-[15px] text-ink-soft">
                 <input type="checkbox" name="removeCover" value="1" className="h-5 w-5 rounded border-line" />
                 Remove current cover
@@ -218,15 +231,29 @@ export function BookForm({
             )}
           </div>
         )}
-        <input
-          id="cover"
-          name="cover"
-          type="file"
-          ref={coverInputRef}
-          accept="image/png,image/jpeg,image/webp"
-          className="focus-ring w-full rounded-lg border border-line bg-paper-dim px-3.5 py-2.5 text-[15px]"
-        />
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+          <input
+            id="cover"
+            name="cover"
+            type="file"
+            ref={coverInputRef}
+            accept="image/png,image/jpeg,image/webp"
+            className="focus-ring w-full min-w-0 flex-1 rounded-lg border border-line bg-paper-dim px-3.5 py-2.5 text-[15px]"
+          />
+          <button
+            type="button"
+            onClick={() => setCapturingPhoto(true)}
+            className="focus-ring flex shrink-0 items-center justify-center gap-2 rounded-lg border border-line bg-paper px-4 py-2.5 text-[14px] font-semibold text-ink hover:bg-paper-dim"
+          >
+            <CameraIcon className="h-4 w-4" />
+            Take Photo
+          </button>
+        </div>
       </FormField>
+
+      {capturingPhoto && (
+        <CameraCapture onCapture={handleCapturedPhoto} onClose={() => setCapturingPhoto(false)} />
+      )}
 
       <SubmitButton label={submitLabel} savingLabel={savingLabel} />
     </form>

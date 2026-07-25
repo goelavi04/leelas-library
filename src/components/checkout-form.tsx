@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import type { CheckoutFormState } from "@/app/admin/loans/actions";
 import { FormField, inputClass, ErrorMessage } from "@/components/auth-card";
+import { SearchableSelect } from "@/components/searchable-select";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -46,37 +47,36 @@ export function CheckoutForm({
         </FormField>
       ) : (
         <FormField label="Book" htmlFor="bookId">
-          <select id="bookId" name="bookId" required className={inputClass}>
-            <option value="">Choose an available book…</option>
-            {availableBooks.map((book) => (
-              <option key={book.id} value={book.id}>
-                {book.title} — {book.author}
-              </option>
-            ))}
-          </select>
+          <SearchableSelect
+            name="bookId"
+            required
+            placeholder="Search by title or author…"
+            options={availableBooks.map((book) => ({ id: book.id, label: book.title, sublabel: book.author }))}
+          />
           {state.fieldErrors?.bookId && <p className="text-sm text-critical">{state.fieldErrors.bookId}</p>}
         </FormField>
       )}
 
       <FormField label="Member" htmlFor="memberId">
-        {members.length === 0 ? (
-          <p className="text-[14px] text-ink-soft">
-            No members yet — add one from the{" "}
-            <a href="/admin/members/new" className="font-semibold text-accent hover:underline">
-              Members
-            </a>{" "}
-            page first.
-          </p>
-        ) : (
-          <select id="memberId" name="memberId" required className={inputClass}>
-            <option value="">Choose a member…</option>
-            {members.map((member) => (
-              <option key={member.id} value={member.id}>
-                {member.full_name} {member.email ? `(${member.email})` : ""}
-              </option>
-            ))}
-          </select>
-        )}
+        <SearchableSelect
+          name="memberId"
+          required
+          placeholder="Search by name or email…"
+          emptyMessage={
+            <>
+              No members yet — add one from the{" "}
+              <a href="/admin/members/new" className="font-semibold text-accent hover:underline">
+                Members
+              </a>{" "}
+              page first.
+            </>
+          }
+          options={members.map((member) => ({
+            id: member.id,
+            label: member.full_name,
+            sublabel: member.email ?? undefined,
+          }))}
+        />
         {state.fieldErrors?.memberId && <p className="text-sm text-critical">{state.fieldErrors.memberId}</p>}
       </FormField>
 

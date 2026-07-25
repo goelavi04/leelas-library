@@ -63,7 +63,7 @@ export function BarcodeScanner({
   }, []);
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-black/90 p-4">
+    <div className="fixed inset-0 z-50 flex flex-col bg-[rgba(0,0,0,0.92)] p-4">
       <div className="flex items-center justify-between text-white">
         <p className="text-[15px] font-semibold">Scan a book&rsquo;s barcode</p>
         <button

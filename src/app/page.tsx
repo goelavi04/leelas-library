@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getSession } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { coverImageUrl } from "@/lib/books";
 import { BookCard } from "@/components/book-card";
@@ -10,12 +11,16 @@ const GENRE_CHIP_LIMIT = 8;
 
 export default async function HomePage() {
   const supabase = await createClient();
-  const [{ count: total }, { count: available }, { data: recentBooks }, { data: genreRows }] = await Promise.all([
-    supabase.from("books").select("*", { count: "exact", head: true }),
-    supabase.from("books").select("*", { count: "exact", head: true }).eq("status", "available"),
-    supabase.from("books").select("*").order("created_at", { ascending: false }).limit(RECENT_BOOKS_LIMIT),
-    supabase.from("books").select("genre").not("genre", "is", null).limit(GENRE_SAMPLE_LIMIT),
-  ]);
+  const [session, { count: total }, { count: available }, { data: recentBooks }, { data: genreRows }] =
+    await Promise.all([
+      getSession(),
+      supabase.from("books").select("*", { count: "exact", head: true }),
+      supabase.from("books").select("*", { count: "exact", head: true }).eq("status", "available"),
+      supabase.from("books").select("*").order("created_at", { ascending: false }).limit(RECENT_BOOKS_LIMIT),
+      supabase.from("books").select("genre").not("genre", "is", null).limit(GENRE_SAMPLE_LIMIT),
+    ]);
+
+  const isAdmin = session?.profile.role === "admin";
 
   const genres = [...new Set((genreRows ?? []).map((row) => row.genre).filter(Boolean) as string[])].sort((a, b) =>
     a.localeCompare(b)
@@ -25,21 +30,36 @@ export default async function HomePage() {
     <div>
       <section className="bg-accent px-4 py-14 text-center sm:px-6 sm:py-20 md:py-24">
         <div className="mx-auto max-w-xl">
-          <h1 className="font-display text-xl font-bold leading-tight text-white text-balance sm:text-2xl md:text-3xl">
-            A home for every story we&rsquo;ve collected — where every book finds its reader.
+          <h1 className="animate-fade-up font-display text-xl font-bold leading-tight text-white text-balance sm:text-2xl md:text-3xl">
+            Every story on our shelves — always within reach.
           </h1>
-          <p className="mt-4 text-[15px] text-white/80 sm:text-[16.5px]">
-            Browse the shelves, see what&rsquo;s in, and keep track of what you&rsquo;re reading —
-            all in one place.
+          <p
+            className="animate-fade-up mt-4 text-[15px] text-white/80 sm:text-[16.5px]"
+            style={{ animationDelay: "0.1s" }}
+          >
+            Browse the shelves and see what&rsquo;s available to borrow, any time.
           </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Link
-              href="/catalog"
-              className="focus-ring flex items-center gap-2 rounded-lg bg-gold px-5 py-2.5 text-[14.5px] font-semibold text-[#20140a] shadow-card hover:bg-gold-hover"
-            >
-              <SearchIcon className="h-4 w-4" />
-              Browse the catalog
-            </Link>
+          <div
+            className="animate-fade-up mt-8 flex flex-wrap justify-center gap-3"
+            style={{ animationDelay: "0.2s" }}
+          >
+            {isAdmin ? (
+              <Link
+                href="/admin"
+                className="focus-ring flex items-center gap-2 rounded-lg bg-gold px-5 py-2.5 text-[14.5px] font-semibold text-[#20140a] shadow-card hover:bg-gold-hover"
+              >
+                <GridIcon className="h-4 w-4" />
+                Go to Admin Dashboard
+              </Link>
+            ) : (
+              <Link
+                href="/catalog"
+                className="focus-ring flex items-center gap-2 rounded-lg bg-gold px-5 py-2.5 text-[14.5px] font-semibold text-[#20140a] shadow-card hover:bg-gold-hover"
+              >
+                <SearchIcon className="h-4 w-4" />
+                Browse the catalog
+              </Link>
+            )}
           </div>
         </div>
       </section>
