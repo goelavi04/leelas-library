@@ -97,7 +97,39 @@ export function normalizeIsbn(raw: string): string | null {
   return cleaned;
 }
 
-/** Looks up a book by ISBN, trying Open Library first and Google Books as a fallback. */
-export async function lookupBook(isbn: string): Promise<BookLookupResult | null> {
+/** Converts ISBN-13 <-> ISBN-10 so a book indexed under only one format still resolves. */
+function alternateIsbn(isbn: string): string | null {
+  if (isbn.length === 13) {
+    if (!isbn.startsWith("978")) return null;
+    const core = isbn.slice(3, 12);
+    let sum = 0;
+    for (let i = 0; i < 9; i++) sum += (10 - i) * Number(core[i]);
+    const check = (11 - (sum % 11)) % 11;
+    return core + (check === 10 ? "X" : String(check));
+  }
+
+  if (isbn.length === 10) {
+    const core = "978" + isbn.slice(0, 9);
+    let sum = 0;
+    for (let i = 0; i < 12; i++) sum += (i % 2 === 0 ? 1 : 3) * Number(core[i]);
+    return core + String((10 - (sum % 10)) % 10);
+  }
+
+  return null;
+}
+
+async function lookupByExactIsbn(isbn: string): Promise<BookLookupResult | null> {
   return (await lookupOpenLibrary(isbn)) ?? (await lookupGoogleBooks(isbn));
+}
+
+/** Looks up a book by ISBN, trying Open Library then Google Books, then the same
+ * two providers again under the equivalent ISBN-10/13 in case the book is only
+ * indexed under the other format. */
+export async function lookupBook(isbn: string): Promise<BookLookupResult | null> {
+  const direct = await lookupByExactIsbn(isbn);
+  if (direct) return direct;
+
+  const alternate = alternateIsbn(isbn);
+  if (!alternate) return null;
+  return lookupByExactIsbn(alternate);
 }

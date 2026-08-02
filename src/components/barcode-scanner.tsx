@@ -16,13 +16,12 @@ export function BarcodeScanner({
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // ISBNs are only ever printed as EAN-13 (Bookland, prefix 978/979). Books
+    // often carry a second barcode too (price add-on, retail UPC, etc.) —
+    // scanning other formats let the reader lock onto that instead of the
+    // ISBN, which is why lookups used to fail or return the wrong book.
     const hints = new Map();
-    hints.set(DecodeHintType.POSSIBLE_FORMATS, [
-      BarcodeFormat.EAN_13,
-      BarcodeFormat.EAN_8,
-      BarcodeFormat.UPC_A,
-      BarcodeFormat.UPC_E,
-    ]);
+    hints.set(DecodeHintType.POSSIBLE_FORMATS, [BarcodeFormat.EAN_13]);
     const reader = new BrowserMultiFormatReader(hints);
     let stopped = false;
     let controls: { stop: () => void } | undefined;
@@ -34,8 +33,13 @@ export function BarcodeScanner({
         (result, err) => {
           if (stopped) return;
           if (result) {
+            const text = result.getText();
+            if (!/^97[89]\d{10}$/.test(text)) {
+              // Not a Bookland ISBN barcode (e.g. a price add-on code) — keep scanning.
+              return;
+            }
             controls?.stop();
-            onDetected(result.getText());
+            onDetected(text);
           } else if (err && !(err instanceof NotFoundException)) {
             // NotFoundException fires continuously between frames while
             // nothing is in view yet — not a real error, ignore it.
